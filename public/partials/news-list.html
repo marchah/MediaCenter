@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2">
+      <!--Sidebar content-->
+    </div>
+    <div class="col-md-10">
+      <!--Body content-->
+
+      <ul>
+        <li ng-repeat="video in news">
+          <a href="#/video/{{video._id}}"><img ng-src="{{videoImageUri}}{{video.pathImage}}" />{{video.imageUrl}}</a>
+          <a href="#/video/{{video._id}}">{{video.title}}</a>
+          <p>{{video.description}}</p>
+          <p>{{video.duration}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

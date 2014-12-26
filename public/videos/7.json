@@ -1,0 +1,13 @@
+{
+	"id": 7,
+	"imageUrl": "img/videos/unavailable_lrg.png",
+	"title": "Video 7",
+	"description": "Description Video 7",
+	"duration": "10min",
+	"view": 0,
+	"idchannel": 2,
+	"channel": "Channel 2",
+	"iduser": 2,
+	"user": "User 2",
+	"uploaddate": "Today"
+    }

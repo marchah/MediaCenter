@@ -1,0 +1,27 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2">
+      <!--Sidebar content-->
+    </div>
+    <div class="col-md-10">
+      <!--Body content-->
+
+
+      <h2>Login</h2>
+      <form ng-submit="login()">
+	<p>
+	  <label class="control-label">Email/Login</label>
+	  <input type="text" placeholder="Email/Login" ng-model="user.username" />
+	</p>
+	<p>
+	  <label class="control-label">Password</label>
+	  <input type="password" placeholder="Password" ng-model="user.password" /><br/>
+	</p>
+	<p>
+	  <button type="submit" class="btn btn-primary">Login</button>
+	</p>
+      </form>
+
+    </div>
+  </div>
+</div>

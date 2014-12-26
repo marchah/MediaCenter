@@ -1,0 +1,28 @@
+<h1>{{video.title}}</h1>
+
+<video ng-src="{{videoURL}}" controls></video>
+
+<p>{{video.description}}</p>
+
+<ul>
+  <li>
+    <span>Duration</span>
+    <dd>{{video.duration}}</dd>
+  </li>
+  <li>
+    <span>View</span>
+    <dd>{{video.view}}</dd>
+  </li>
+  <li>
+    <span>Channel</span>
+    <dd><a href="#/videos/{{video.idChannel}}/1">{{video.channel}}</a></dd>
+  </li>
+  <li>
+    <span>User</span>
+    <dd>{{video.user}}</dd>
+  </li>
+  <li>
+    <span>Upload Date</span>
+    <dd>{{video.uploadDate}}</dd>
+  </li>
+</ul>

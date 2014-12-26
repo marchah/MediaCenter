@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en" ng-app="mediacenterApp">
+<head>
+  <meta charset="utf-8">
+  <title>Media Center</title>
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="css/app.css">
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/controllers.js"></script>
+</head>
+<body>
+  <div>
+    <ul>
+      <li>
+	<a href="#/news">News</a>
+      </li>
+      <li>
+	<a href="#/videos">List Videos</a>
+      </li>
+      <li>
+	<a href="#/channels">List Channels</a>
+      </li>
+      <li>
+	<a href="#/users">List Users</a>
+      </li>
+      <li>
+	<a href="#/login">Login</a>
+      </li>
+    </ul>
+  </div>
+  <div ng-view></div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+{
+    "id": 5,
+    "imageUrl": "img/videos/unavailable_lrg.png",
+    "title": "Video 5",
+    "description": "Description Video 5",
+    "duration": "10min",
+    "view": 0,
+    "idchannel": 3,
+    "channel": "Channel 3",
+    "iduser": 3,
+    "user": "User 3",
+    "uploaddate": "Today"
+}
