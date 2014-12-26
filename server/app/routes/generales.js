@@ -53,7 +53,8 @@ function isLoggedIn(req, res, next) {
 
     if (!req.isAuthenticated()) {
 	console.log('Not logged');
-	res.send(401);
+//	res.send(401);
+	next();
     }
     else {
 	console.log('logged');

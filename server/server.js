@@ -36,8 +36,13 @@ global.PATH_API	= __dirname;
 
 
 require('./config/passport')(passport); // pass passport for configuration
-
-app.use(express.static(__dirname + '..//public'));
+/*
+app.use("/js", express.static(__dirname + "/../public/js"));
+app.use("/img", express.static(__dirname + "/../public/img"));
+app.use("/css", express.static(__dirname + "/../public/css"));
+app.use("/partials", express.static(__dirname + "/../public/partials"));
+*/
+app.use(express.static(__dirname + '/../public'));
 
 // set up our express application
 app.use(morgan('dev')); // log every request to the console

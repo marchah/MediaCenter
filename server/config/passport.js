@@ -60,7 +60,7 @@ module.exports = function(passport) {
     // =========================================================================
     // LOCAL LOGIN =============================================================
     // =========================================================================
-    passport.use('local-login', new LocalStrategy({
+/*    passport.use('local-login', new LocalStrategy({
         usernameField : 'login',
         passwordField : 'password',
         passReqToCallback : true // allows us to pass in the req from our route
@@ -87,7 +87,7 @@ module.exports = function(passport) {
 	  });
     }));
 
-
+*/
 
 
 };

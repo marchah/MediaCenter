@@ -15,8 +15,11 @@ module.exports = function(app, passport, isLoggedIn) {
 	failureFlash : true // allow flash messages
     }));*/
 
-    passport.use(new LocalStrategy(
+    passport.use(new LocalStrategy({
+        usernameField : 'login',
+        passwordField : 'password'},
 	function(login, password, done) {
+	    console.log("login");
 	    if (login === "admin" && password === "admin") // stupid example
 		return done(null, {name: "admin"});
 	    
@@ -24,7 +27,8 @@ module.exports = function(app, passport, isLoggedIn) {
 	}
     ));
 
-    app.post('/login', passport.authenticate('local'), function(req, res) {
+    app.post('/login', /*function(req, res) {*/passport.authenticate('local'), function(req, res) {
+	console.log(req.body);
 	res.send(req.user);
     });
 
