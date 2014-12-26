@@ -49,5 +49,5 @@ mediacenterApp.config(['$routeProvider',
 
 //constants
 mediacenterApp.constant('Settings', {
-    apiUri: 'http://5.135.163.236:5050/'
+    apiUri: '/'
 });
