@@ -12,31 +12,31 @@ var Search	= require(global.PATH_API + '/app/tools/search.js');
 
 module.exports = function(app, passport, isLoggedIn) {
 
-    app.get('/videos', isLoggedIn, function(req, res) {
+    app.get('/videos', function(req, res) {
 	Search.searchVideo(null, 0, 0, res);
     });
 
-    app.get('/videos/:numPage(\\d+)', isLoggedIn, function(req, res) {
+    app.get('/videos/:numPage(\\d+)', function(req, res) {
 	Search.searchVideo(null, req.params.numPage, 0, res);
     });
 
-    app.get('/videos/:idChannel', isLoggedIn, function(req, res) {
+    app.get('/videos/:idChannel', function(req, res) {
 	Search.searchVideo(req.params.idChannel, 0, 0, res);
     });
 
-    app.get('/videos/:numPage(\\d+)/:nbVideoPerPage(\\d+)', isLoggedIn, function(req, res) {
+    app.get('/videos/:numPage(\\d+)/:nbVideoPerPage(\\d+)', function(req, res) {
 	Search.searchVideo(null, req.params.numPage, req.params.nbVideoPerPage, res);
     });
 
-    app.get('/videos/:idChannel/:numPage(\\d+)', isLoggedIn, function(req, res) {
+    app.get('/videos/:idChannel/:numPage(\\d+)', function(req, res) {
 	Search.searchVideo(req.params.idChannel, req.params.numPage, 0, res);
     });
 
-    app.get('/videos/:idChannel/:numPage(\\d+)/:nbVideoPerPage(\\d+)', isLoggedIn, function(req, res) {
+    app.get('/videos/:idChannel/:numPage(\\d+)/:nbVideoPerPage(\\d+)', function(req, res) {
 	Search.searchVideo(req.params.idChannel, req.params.numPage, req.params.nbVideoPerPage, res);
     });
 
-    app.get('/video/:idVideo', isLoggedIn, function(req, res) {
+    app.get('/video/:idVideo', function(req, res) {
 	async.waterfall([
 	    function(callback){
 		Video.findOne({_id: req.params.idVideo}, {path: false, type: false, __v: false}, function(err, video) {
@@ -74,7 +74,6 @@ module.exports = function(app, passport, isLoggedIn) {
 		    }
 		    var tmp = video.toObject();
 		    tmp.channel = channel.name;
-//		    delete tmp.idChannel;
 		    callback(null, tmp); 
 		});
 	    },
@@ -108,7 +107,7 @@ module.exports = function(app, passport, isLoggedIn) {
 	});
     });
 
-    app.get('/video/picture/:name', isLoggedIn, function(req, res) {
+    app.get('/video/picture/:name', function(req, res) {
 	res.sendfile(global.PATH_API + '/picture/' + req.params.name, function (err) {
 	    if (err) {
 		console.log("sendFile err: " + err);
@@ -117,37 +116,7 @@ module.exports = function(app, passport, isLoggedIn) {
 	});
     });
 
-/*    app.get('/videoStream', isLoggedIn, function(req, res) {
-	Video.findOne({_id: req.query.idVideo}, function(err, video) {
-	    if (err) {
-		console.log(err);
-		reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: /videoStream Video.findOne", err);
-	    }
-	    if (video == null) {
-		console.log("video not found");
-		reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: /videoStream Video.findOne: video not found", err);
-	    }
-	    //if (err) {
-	//	res.setHeader('Content-Type', 'application/json');
-	//	res.json({message: constantes.ERROR_API_DB, video: false});
-	//	return ;
-	  //  }
-	    //if (video == null) {
-	//	res.setHeader('Content-Type', 'application/json');
-	//	res.json({message: constantes.ERROR_UNKNOW_VIDEO, video: false});
-	//	return ;
-	  //  } // TODO: error gestion
-	   
-	    res.sendfile(global.PATH_API + '/' + video.path, function (err) {
-		if (err) {
-		    console.log("sendFile err: " + err);
-		    reporting.saveErrorAPI(constantes.TYPE_ERROR_STREAM, "app/routes/video.js: /videoStream sendFile ", err);
-		}
-	    });
-	});
-    });
-*/
-    app.get('/videoStream/:idVideo', isLoggedIn, function(req, res) {
+    app.get('/videoStream/:idVideo', function(req, res) {
 	Video.findOne({_id: req.params.idVideo}, function(err, video) {
 	    if (err) {
 		console.log(err);
@@ -179,7 +148,8 @@ module.exports = function(app, passport, isLoggedIn) {
 	});
     });
 
-    app.get('/news', isLoggedIn, function(req, res) {
+    app.get('/news', function(req, res) {
+	    console.log('test');
 	Video.find({}, {title: true, description: true, duration: true}, {sort: {date: 'desc'}, limit: constantes.LIMIT_NB_NEWS}, function(err, videos) {
 	    if (err) {
 		reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /news Video.find()", err);

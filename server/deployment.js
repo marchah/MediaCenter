@@ -14,8 +14,6 @@ var user = function() {
     newUser.local.login    = 'user1';
     newUser.local.email    = 'user1@test.com';
     newUser.local.password = newUser.generateHash('totoauzoo');
-    newUser.local.birthday = new Date();
-    newUser.local.actif    = true;
 
     newUser.save(function(err){if(err)console.log(err); console.log("****** User End ******");});
 }
@@ -101,9 +99,9 @@ var video = function() {
 
 };
 
-user();
+//user();
 //channel();
-//video();
+video();
 
 console.log("Ctrl + c for exit");
 

@@ -11,9 +11,6 @@ var userSchema = mongoose.Schema({
 	email	     : {type: String, match: /\S+@\S+\.\S+/},
 	password     : {type: String},
 	hashConformationEmail: {type: String},
-	birthday     : {type: Date},
-	actif        : {type: Boolean},
-	admin        : {type: Boolean}
     },
     inscriptionDate: {type: Date, default: Date.now}
 });

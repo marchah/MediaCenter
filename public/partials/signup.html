@@ -1,0 +1,40 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2">
+      <!--Sidebar content-->
+    </div>
+    <div class="col-md-10">
+      <!--Body content-->
+
+
+      <h2>Sign Up</h2>
+      <form ng-submit="signup()">
+	<p>
+	  <label>Name*</label>
+	  <input type="text" placeholder="Name" ng-model="user.name" ng-required="true"/>
+	</p>
+	<p>
+	  <label>Login*</label>
+	  <input type="text" placeholder="Login" ng-model="user.login" ng-required="true"/>
+	</p>
+	<p>
+	  <label>Email*</label>
+	  <input type="email" placeholder="Email" ng-model="user.email" ng-required="true"/>
+	</p>
+	<p>
+	  <label>Password*</label>
+	  <input type="password" placeholder="Password" ng-model="user.password" ng-required="true"/><br/>
+	</p>
+	<p>
+	  <label>Password Confirmation*</label>
+	  <input type="password" placeholder="Password Confirmation" ng-model="user.password2" ng-required="true"/><br/>
+	</p>
+	<p>
+	  <button type="submit">Sign Up</button>
+	</p>
+	<p>{{errorMessage}}</p>
+      </form>
+
+    </div>
+  </div>
+</div>

@@ -1,56 +1,132 @@
 var LocalStrategy    = require('passport-local').Strategy;
+var Validator        = require('validator');
 
-var constantes = require(global.PATH_API + "/config/constantes.js");
+var User	= require(global.PATH_API + '/app/models/user');
+var constantes	= require(global.PATH_API + '/config/constantes.js');
+var reporting	= require(global.PATH_API + '/app/tools/reporting.js');
+var Tool	= require(global.PATH_API + '/app/models/Tools.class.js');
 
 module.exports = function(app, passport, isLoggedIn) {
-// =============================================================================
-// AUTHENTICATE (FIRST LOGIN) ==================================================
-// =============================================================================
 
-    // locally --------------------------------
-    // LOGIN ===============================
-    /*app.post('/login', passport.authenticate('local-login', {
-	successRedirect: '/loginSuccess',
-	failureRedirect: '/loginFailure',
-	failureFlash : true // allow flash messages
-    }));*/
-
-    passport.use(new LocalStrategy({
+    passport.use('local-login', new LocalStrategy({
         usernameField : 'login',
         passwordField : 'password'},
 	function(login, password, done) {
-	    console.log("login");
-	    if (login === "admin" && password === "admin") // stupid example
-		return done(null, {name: "admin"});
-	    
-	    return done(null, false, { message: 'Incorrect username.' });
+	    User.findOne({$or:[{'local.email': login.toLowerCase()}, {'local.login': login.toLowerCase()}]}, function(err, user) {
+		    if (err) {
+			reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "config/passport.js: local-login User.findOne ", err);
+			return done(err);
+		    }
+		    if (!user)
+			return done(null, false, {message: constantes.ERROR_UNKNOW_USER});
+                  if (!user.validPassword(password))
+                      return done(null, false, {message: constantes.ERROR_WRONG_PASSWORD});
+                  else
+                      return done(null, user);
+              });
 	}
     ));
-
-    app.post('/login', /*function(req, res) {*/passport.authenticate('local'), function(req, res) {
-	console.log(req.body);
-	res.send(req.user);
-    });
-
-
     
-/*    app.post('/loginNew', passport.authenticate('local'), function(req, res) {
-	res.json(req.authInfo);
-    });
-*/
+    app.post('/login', function(req, res, next) {
+	    passport.authenticate('local-login', function(err, user, info) {
+		    if (err) { return next(err) }
+		    if (!user) {
+			return res.status(401).send(info);
+		    }
+		    req.logIn(user, function(err) {
+			    if (err) { return next(err); }
+			    return res.send(user);
+			});
+		})(req, res, next);
+	});
 
-    app.get('/loginFailure', function(req, res, next) {
-	res.setHeader('Content-Type', 'application/json');
-	if (req.flash('loginMessage').length <= 0)
-	    res.json({isAuthenticated: false, message: constantes.ERROR_REQUIREMENT_MISSING});
-	else
-	    res.json({isAuthenticated: false, message: req.flash('loginMessage')[0]});
-	//next();
+
+    passport.use('local-signup', new LocalStrategy({
+        usernameField : 'login',
+	passwordField : 'password',
+	passReqToCallback : true},
+	function(req, login, password, done) {
+	    if (!req.user) {
+		if (!Validator.isLength(req.body.name, constantes.SIZE_MIN_NAME, constantes.SIZE_MAX_NAME))
+		    return done(null, false, {message: 'Name size must be between '+constantes.SIZE_MIN_NAME+' and '+constantes.SIZE_MAX_NAME+'.'});
+		if (!Validator.isLength(login, constantes.SIZE_MIN_LOGIN, constantes.SIZE_MAX_LOGIN))
+		    return done(null, false, {message: 'Login size must be between '+constantes.SIZE_MIN_LOGIN+' and '+constantes.SIZE_MAX_LOGIN+'.'});
+		if (Validator.contains(req.body.login, " "))
+		    return done(null, false, {message: 'Login mustn\'t contain backspace.'});
+		if (!Validator.isLength(password, constantes.SIZE_MIN_LOGIN, constantes.SIZE_MAX_LOGIN))
+		    return done(null, false, {message: 'Password size must be between '+constantes.SIZE_MIN_LOGIN+' and '+constantes.SIZE_MAX_LOGIN+'.'});
+		//if (!Tool.isValidePassword(password))
+		//return done(null, false, {message: 'Password must contain at least one digit, one lower case, one upper case and 6 from the mentioned characters.'});
+		if (!Validator.isEmail(req.body.email))
+		    return done(null, false, {message: 'Email invalid format.'});
+		User.findOne({ 'local.login' :  login }, function(err, user) {
+			if (err)
+			    return done(err);
+			if (user)
+			    return done(null, false, {message: 'That login is already taken.'});
+			else {
+			    User.findOne({ 'local.email' :  req.body.email.toLowerCase() }, function(err, user) {
+				    if (err)
+					return done(err);
+				    if (user)
+					return done(null, false, {message: 'That email is already taken.'});
+				    else {
+					// create the user
+					var newUser            = new User();
+					newUser.name     = req.body.name;
+					newUser.local.login    = login;
+					newUser.local.email    = req.body.email.toLowerCase();
+					newUser.local.password = newUser.generateHash(password);
+					newUser.save(function(err) {
+						if (err)
+						    throw err;
+						return done(null, newUser);
+					    });
+				    }
+				});
+			}
+		    });
+	    } else if ( !req.user.local.email ) {
+		var user            = req.user;
+		user.name     = req.body.name;
+		user.local.login    = login;
+		user.local.email    = req.body.email.toLowerCase();
+		user.local.password = user.generateHash(password);
+		
+		user.save(function(err) {
+			if (err)
+			    throw err;
+			return done(null, user);
+		    });
+	    } else {
+		return done(null, req.user);
+	    }
+	}));
+    /*
+    app.post('/signup', passport.authenticate('local-signup'), function(req, res) {
+	res.send(req.user);
+    });*/
+
+    app.post('/signup', function(req, res, next) {
+	    passport.authenticate('local-signup', function(err, user, info) {
+		    if (err) { return next(err) }
+		    if (!user) {
+			return res.status(400).send(info);
+		    }
+		    req.logIn(user, function(err) {
+			    if (err) { return next(err); }
+			    return res.send(user);
+			});
+		})(req, res, next);
+	});
+
+
+    app.get('/loggedin', function(req, res) {
+	res.send(req.isAuthenticated() ? req.user : '0');
     });
- 
-    app.get('/loginSuccess', function(req, res, next) {
-	res.setHeader('Content-Type', 'application/json');
-	res.json({isAuthenticated: true, message: constantes.AUTHENTIFICATION_SUCCESS});
-	//next();
+
+    app.post('/logout', function(req, res) {
+	req.logOut();
+	res.send(200);
     });
 };

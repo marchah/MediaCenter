@@ -60,8 +60,22 @@ mediacenterControllers.controller('NewsListCtrl', ['$scope', '$http', 'Settings'
 	    });
 	}]);
 
-mediacenterControllers.controller('LoginCtrl', ['$scope', '$http', 'Settings',
-	function ($scope, $http, Settings) {
+mediacenterControllers.controller('LoginCtrl', ['$scope', '$rootScope', '$http', '$location', 'Settings',
+       function ($scope, $rootScope, $http, $location, Settings) {
+
+	    $scope.isLoggin = function() {
+		if (typeof $scope.user !== 'undefined')
+		    return true;
+		/*$http.get('/loggedin').success(function(user){
+		    if (user !== '0') {
+			$rootScope.user = user;
+			return true;
+		    }
+		    else
+			return false;
+			});*/
+		return false;
+	    };
 	    $scope.login = function() {
 
 		$http.post(Settings.apiUri + 'login', {
@@ -69,16 +83,90 @@ mediacenterControllers.controller('LoginCtrl', ['$scope', '$http', 'Settings',
 		    password: $scope.user.password,
 		})
 		    .success(function(user){
-      // No error: authentication OK
-		//	$rootScope.message = 'Authentication successful!';
-		//	$location.url('/admin');
-			console.log('success');
+			    $rootScope.user = user;
+			    $location.url('/news');
 		    })
-		    .error(function(){
-      // Error: authentication failed
-			//$rootScope.message = 'Authentication failed.';
-			//$location.url('/login');
-			console.log('failed');
+		.error(function(data, status, headers, config){
+			$scope.errorMessage = "Authentication failed: " + data.message;
+		    });
+	    };
+	}]);
+
+
+mediacenterControllers.controller('LogoutCtrl', ['$scope', '$rootScope', '$http', '$location', 'Settings',
+       function ($scope, $rootScope, $http, $location, Settings) {
+
+	    $http.post(Settings.apiUri + 'logout')
+		.success(function() {
+			delete $rootScope.user;
+			$location.url('/news');
+		})
+		.error(function(){
+			$scope.errorMessage = "LogOut failed.";
+		 });
+	}]);
+
+
+mediacenterControllers.controller('SignupCtrl', ['$scope', '$rootScope', '$http', '$location', 'Settings',
+       function ($scope, $rootScope, $http, $location, Settings) {
+
+	    $scope.signup = function() {
+		$scope.errorMessage = "";
+		if ($scope.user.login.indexOf(" ") > -1) {
+		    $scope.errorMessage = "Login mustn't contain backspace.";
+		    return false;
+		}
+		if ($scope.user.password != $scope.user.password2) {
+		    $scope.errorMessage = "Passwords don't match.";
+		    return false;
+		}
+		$http.post(Settings.apiUri + 'signup', {
+		    name: $scope.user.name,
+		    login: $scope.user.login,
+		    email: $scope.user.email,
+		    password: $scope.user.password,
+		})
+		.success(function(user){
+			$rootScope.user = user;
+			$location.url('/news');
+		    })
+		.error(function(data, status, headers, config){
+			$scope.errorMessage = "Sign Up failed: " + data.message;
+		    });
+	    };
+	}]);
+
+
+mediacenterControllers.controller('ProfileCtrl', ['$scope', '$rootScope', '$http', '$location', 'Settings',
+       function ($scope, $rootScope, $http, $location, Settings) {
+
+	  if (typeof $scope.user === 'undefined')
+	      $location.url('/news');
+	  $scope.name = $scope.user["name"];
+		/*$http.get('/loggedin').success(function(user){
+		    if (user !== '0') {
+			$rootScope.user = user;
+			return true;
+		    }
+		    else
+			return false;
+			});*/
+
+	    $scope.update = function() {
+		$scope.errorMessage = "";
+		if ($scope.user.password != $scope.user.password2) {
+		    $scope.errorMessage = "New Passwords don't match.";
+		    return false;
+		}
+		$http.post(Settings.apiUri + 'user', {
+		    name: $scope.name,
+		    password: $scope.user.password
+		})
+		.success(function(user){
+			$rootScope.user = user;
+		    })
+		.error(function(data, status, headers, config){
+			$scope.errorMessage = "Update failed: " + data.message;
 		    });
 	    };
 	}]);

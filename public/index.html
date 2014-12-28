@@ -25,11 +25,18 @@
       <li>
 	<a href="#/users">List Users</a>
       </li>
-      <li>
-	<a href="#/login">Login</a>
-      </li>
     </ul>
   </div>
   <div ng-view></div>
+  <div ng-controller="LoginCtrl">
+    <p ng-if="isLoggin()">
+      <a href="#/profile">{{user.name}}</a>
+      <a href="#/logout">LogOut</a>
+    </p>
+    <p ng-if="!isLoggin()">
+      <a href="#/login">Login</a>
+      <a href="#/signup">Sign Up</a>
+    </p>
+  </div>
 </body>
 </html>

@@ -23,7 +23,7 @@ module.exports = function(app, passport) {
     });
 
 
-    app.get('/listChannel', isLoggedIn, function(req, res) {
+    app.get('/listChannel', function(req, res) {
 	Channel.find({}, function(err, listChannel) {
 	    if (err) {
 		reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/generql.js: /listChannel Channel.find", err);
@@ -46,28 +46,12 @@ module.exports = function(app, passport) {
 
 };
 
-
-
-// route middleware to ensure user is logged in
 function isLoggedIn(req, res, next) {
-
     if (!req.isAuthenticated()) {
-	console.log('Not logged');
-//	res.send(401);
+	res.send(401);
 	next();
     }
     else {
-	console.log('logged');
 	next();
     }
-
-/*    if (req.isAuthenticated()) {
-	console.log('logged');
-	return next();
-    }
-//    console.log(req);
-    console.log('Not logged');
-    return next();
-//    res.setHeader('Content-Type', 'application/json');
-//    res.json({message: constantes.ERROR_NOT_LOGGEDIN, isAuthenticated: false});*/
 }
