@@ -54,6 +54,10 @@ mediacenterApp.config(['$routeProvider',
 			templateUrl: 'partials/profile.html',
 			controller: 'ProfileCtrl'
 		    }).
+		    when('/upload', {
+			templateUrl: 'partials/upload.html',
+			controller: 'UploadCtrl'
+		    }).
 		    otherwise({
 			redirectTo: '/news'
 		    });

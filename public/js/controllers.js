@@ -170,3 +170,35 @@ mediacenterControllers.controller('ProfileCtrl', ['$scope', '$rootScope', '$http
 		    });
 	    };
 	}]);
+
+
+mediacenterControllers.controller('UploadCtrl', ['$scope', '$rootScope', '$http', '$location', 'Settings',
+       function ($scope, $rootScope, $http, $location, Settings) {
+
+	  if (typeof $scope.user === 'undefined')
+	      $location.url('/news');
+		/*$http.get('/loggedin').success(function(user){
+		    if (user !== '0') {
+			$rootScope.user = user;
+			return true;
+		    }
+		    else
+			return false;
+			});*/
+
+	    $scope.upload = function() {
+		$scope.errorMessage = "";
+		console.log($scope.title);
+		console.log($scope.src);
+		$http.post(Settings.apiUri + 'upload', {
+			//title: $scope.video.title,
+		    src: $scope.src
+		})
+		.success(function(){
+			console.log("success");
+		    })
+		.error(function(data, status, headers, config){
+			$scope.errorMessage = "Upload failed: " + data.message;
+		    });
+	    };
+	}]);

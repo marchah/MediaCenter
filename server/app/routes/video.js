@@ -1,4 +1,5 @@
 var async = require('async');
+var formidable = require('formidable');
 
 var constantes = require(global.PATH_API + '/config/constantes.js');
 var reporting = require(global.PATH_API + '/app/tools/reporting.js');
@@ -169,4 +170,41 @@ module.exports = function(app, passport, isLoggedIn) {
 	    return ;
 	});
     });
+
+    app.post('/upload', function(req, res) {
+	    console.log("upload");
+	    var form = new formidable.IncomingForm();
+	    var files = [];
+	    var fields = [];
+
+	    form.uploadDir = global.PATH_API + "/tmp/";
+
+	    form.parse(req, function(err, fields, files) {
+		    if (err)
+			throw err;
+		    console.log(fields);
+		    console.log(files);
+		    res.send();
+		});
+
+	    /*
+	    form
+		.on('field', function(field, value) {
+			console.log(field, value);
+			fields.push([field, value]);
+		    })
+		.on('file', function(field, file) {
+			console.log(field, file);
+			files.push([field, file]);
+		    })
+		.on('end', function() {
+			console.log('-> upload done');
+			res.send();
+			//res.writeHead(200, {'content-type': 'text/plain'});
+			//res.write('received fields:\n\n '+util.inspect(fields));
+			//res.write('\n\n');
+			//res.end('received files:\n\n '+util.inspect(files));
+		    });
+		    form.parse(req);*/
+	});
 };
