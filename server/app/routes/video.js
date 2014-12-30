@@ -150,7 +150,6 @@ module.exports = function(app, passport, isLoggedIn) {
     });
 
     app.get('/news', function(req, res) {
-	    console.log('test');
 	Video.find({}, {title: true, description: true, duration: true}, {sort: {date: 'desc'}, limit: constantes.LIMIT_NB_NEWS}, function(err, videos) {
 	    if (err) {
 		reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /news Video.find()", err);

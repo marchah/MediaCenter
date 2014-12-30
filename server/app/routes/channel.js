@@ -5,7 +5,7 @@ var Channel    = require(global.PATH_API + '/app/models/channel');
 
 module.exports = function(app, passport, isLoggedIn) {
 
-    app.get('/channels', isLoggedIn, function(req, res) {
+    app.get('/channels', function(req, res) {
 	Channel.find({}, function(err, channels) {
 	    if (err) {
 		reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/channel.js: /channels Channel.find()", err);
