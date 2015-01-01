@@ -4,7 +4,8 @@
 
 var mediacenterApp = angular.module('mediacenterApp', [
     'ngRoute',
-    'mediacenterControllers'
+    'mediacenterControllers',
+    'angularFileUpload'
 ]);
 
 mediacenterApp.config(['$routeProvider',
@@ -65,5 +66,13 @@ mediacenterApp.config(['$routeProvider',
 
 //constants
 mediacenterApp.constant('Settings', {
-    apiUri: '/'
+	apiUri: '/',
+	Upload: {
+	    MaxSize: 100 * 1024 * 1024,
+	    TypeSupported: "video/mp4"
+	},
+	Message: {
+	    NoVideoUploadSelected: "Please select a video to upload",
+	    VideoSizeTooBig: "Error: Video Limit Size: 100MB"
+	}
 });

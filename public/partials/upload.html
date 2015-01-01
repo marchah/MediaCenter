@@ -11,11 +11,20 @@
       <form ng-submit="upload()">
 	<p>
 	  <label>Title*</label>
-	  <input type="text" placeholder="Title" ng-value="title" ng-required="true" />
+	  <input type="text" placeholder="Title" ng-model="video.title" ng-required="true" />
+	</p>
+	<p>
+	  <label>Description</label>
+	  <input type="text" placeholder="Description" ng-model="video.description" />
+	</p>
+	<p>
+	  <label>Channel*</label>
+	  <select ng-options="channel._id as channel.name for channel in channels" ng-model="video.idChannel">
 	</p>
 	<p>
 	  <label>Video*</label>
-	  <input type="file" ng-value="src" ng-required="true" />
+	  <input type="file" ng-file-select="onFileSelect($files)" ng-model="video.src"  ng-required="true" accept="{{VideoTypeSupported}}" />
+	  <p>{{processing}}</p>
 	</p>
 	<p>
 	  <button type="submit">Upload</button>

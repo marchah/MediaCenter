@@ -6,7 +6,12 @@ var videoSchema = mongoose.Schema({
     title	: {type: String},
     description : {type: String},
     duration	: {type: String},
-    path	: {type: String},
+    path        : {type: String},
+    pathType	: {
+	    mp4  : {type: String}, 
+	    webm : {type: String},
+	    ogg  : {type: String}
+    },
     pathImage	: {type: String},
     type	: {type: String},
     view	: {type: Number, default: 0},

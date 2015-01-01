@@ -28,8 +28,10 @@ mediacenterControllers.controller('VideoListCtrl', ['$scope', '$routeParams', '$
 
 mediacenterControllers.controller('VideoDetailCtrl', ['$scope', '$sce', '$routeParams', '$http', 'Settings',
       function($scope, $sce, $routeParams, $http, Settings) {
+
 	  $http.get(Settings.apiUri + 'video/' + $routeParams.videoId).success(function(data) {
 	      $scope.video = data.video;
+	      console.log(data.video);
 	      $scope.videoURL = $sce.trustAsResourceUrl(Settings.apiUri + "videoStream/" + data.video._id);
 	      console.log($scope.videoURL);
 	      if (!data.video)
@@ -172,11 +174,11 @@ mediacenterControllers.controller('ProfileCtrl', ['$scope', '$rootScope', '$http
 	}]);
 
 
-mediacenterControllers.controller('UploadCtrl', ['$scope', '$rootScope', '$http', '$location', 'Settings',
-       function ($scope, $rootScope, $http, $location, Settings) {
+mediacenterControllers.controller('UploadCtrl', ['$scope', '$rootScope', '$http', '$location', '$upload', 'Settings',
+       function ($scope, $rootScope, $http, $location, $upload, Settings) {
 
-	  if (typeof $scope.user === 'undefined')
-	      $location.url('/news');
+	     if (typeof $scope.user === 'undefined')
+		 $location.url('/news');
 		/*$http.get('/loggedin').success(function(user){
 		    if (user !== '0') {
 			$rootScope.user = user;
@@ -185,14 +187,53 @@ mediacenterControllers.controller('UploadCtrl', ['$scope', '$rootScope', '$http'
 		    else
 			return false;
 			});*/
+					  
+	  $scope.VideoTypeSupported = Settings.Upload.TypeSupported;
+	  
+	  $http.get(Settings.apiUri + 'channels').success(function(data) {
+		  $scope.channels = data.channels;
+		  $scope.video = {idChannel: data.channels[0]._id};
+	      });
+	  
+	  $scope.onFileSelect = function($files) {
+	      $scope.processing = "";
+	      if ($files[0].size > Settings.Upload.MaxSize) {
+		  $scope.errorMessage = Settings.Message.VideoSizeTooBig;
+		  $scope.video.src = null;
+		  return ;
+	      }
+	      if (typeof $scope.video === "undefined")
+		  $scope.video = {title: $files[0].name.substr(0, $files[0].name.lastIndexOf('.'))};
+	      else if (typeof $scope.title === "undefined" || $scope.title.length <= 0)
+		  $scope.video.title = $files[0].name.substr(0, $files[0].name.lastIndexOf('.'));
+	      $upload.upload({
+		      url: Settings.apiUri + 'uploadVideo',
+			  file: $files[0]
+	      }).progress(function(evt) {
+		      $scope.processing = 'progress: ' + parseInt(100.0 * evt.loaded / evt.total) + '%';
+	      }).success(function(data, status, headers, config) {
+		      $scope.processing = "Uploaded successfully"
+		      $scope.path = data.path;
+	      }).error(function(data) {
+		      $scope.errorMessage = data;
+	      });
+
+	  }
+
 
 	    $scope.upload = function() {
 		$scope.errorMessage = "";
-		console.log($scope.title);
-		console.log($scope.src);
+		
+		if (typeof $scope.path === "undefined" || $scope.path.length <= 0) {
+		    $scope.errorMessage = Settings.Message.NoVideoUploadSelected;
+		    return ;
+		}
+
 		$http.post(Settings.apiUri + 'upload', {
-			//title: $scope.video.title,
-		    src: $scope.src
+		    title: $scope.video.title,
+		    description: $scope.video.description,
+		    idChannel: $scope.video.idChannel,
+		    path: $scope.path
 		})
 		.success(function(){
 			console.log("success");

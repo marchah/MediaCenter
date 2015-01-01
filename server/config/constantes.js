@@ -24,6 +24,7 @@ define("LIMIT_NB_NEWS", 10);
 
 define("PATH_FILE_ERROR_REPORTING", "reporting.log");
 define("ERROR_API_DB", "Error: server internal error.");
+define("ERROR_API", "Error: server internal error.");
 define("ERROR_NOT_LOGGEDIN", "Error: you're not logged in.");
 define("REQUEST_API_SUCCESS", "Request Success.");
 
@@ -53,16 +54,18 @@ define("ERROR_UNKNOW_CHANNEL", "Unknow channel.");
 
 // Upload
 
-define("PATH_FOLDER_VIDEO", "./video/");
+define("PATH_FOLDER_TMP_VIDEO", "/tmp/");
+define("PATH_FOLDER_VIDEO", "/video/");
 define("VIDEO_MAX_SIZE", 100 * 1024 * 1024 );
 
 define("SupportedTypes", ['video/mp4', 'video/webm', 'video/ogg']);
 define("ERROR_TITLE_REQUIRE", "Title Required");
-define("ERROR_CHANNEL_REQUIRE", "Channel Required");
+define("ERROR_ID_CHANNEL_REQUIRE", "IdChannel Required");
+define("ERROR_ID_CHANNEL_INVALID", "Invalid idChannel");
 define("ERROR_ID_USER_REQUIRE", "IdUser Required");
 define("ERROR_UNSUPPORTED_TYPE", "Unsupported type: ");
 define("ERROR_VIDEO_REQUIRE", "No Video Uploaded");
 define("ERROR_VIDEO_SIZE_TOO_BIG", "Error: Video Limit Size: 100MB");
-define("ERROR_INVALID_VIDEO_EXTENSION", "Error Video's Extension Doesn't Accepted, Allow: .avi, .mp4 and .wmv");
-define("UPLOAD_SUCCESS", "Video Uploaded With Success");
-define("UPLOAD_FAILED", "Video Upload Failed");
+//define("ERROR_INVALID_VIDEO_EXTENSION", "Error Video's Extension Doesn't Accepted, Allow: .avi, .mp4 and .wmv");
+//define("UPLOAD_SUCCESS", "Video Uploaded With Success");
+//define("UPLOAD_FAILED", "Video Upload Failed");

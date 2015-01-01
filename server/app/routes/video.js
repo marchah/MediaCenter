@@ -1,15 +1,22 @@
+var fs = require('fs-extra');
+var ffmpeg = require('fluent-ffmpeg');
+
 var async = require('async');
-var formidable = require('formidable');
+var mongoose = require('mongoose');
+var _ = require("underscore");
+
+var multipart = require('connect-multiparty');
 
 var constantes = require(global.PATH_API + '/config/constantes.js');
 var reporting = require(global.PATH_API + '/app/tools/reporting.js');
 
-// load up the models
 var User       = require(global.PATH_API + '/app/models/user');
 var Video      = require(global.PATH_API + '/app/models/video');
 var Channel    = require(global.PATH_API + '/app/models/channel');
 
 var Search	= require(global.PATH_API + '/app/tools/search.js');
+
+var multipartMiddleware = multipart(/*{uploadDir: global.PATH_API + constantes.PATH_FOLDER_TMP_VIDEO }*/);
 
 module.exports = function(app, passport, isLoggedIn) {
 
@@ -95,7 +102,6 @@ module.exports = function(app, passport, isLoggedIn) {
 			return ;
 		    }
 		    video.user = user.name;
-		    delete video.idUser;
 		    callback(null, video);
 		});
 	    }
@@ -131,17 +137,8 @@ module.exports = function(app, passport, isLoggedIn) {
 		res.send(500);
 		return ;
 	    }
-	    /*if (err) {
-		res.setHeader('Content-Type', 'application/json');
-		res.json({message: constantes.ERROR_API_DB, video: false});
-		return ;
-	    }
-	    if (video == null) {
-		res.setHeader('Content-Type', 'application/json');
-		res.json({message: constantes.ERROR_UNKNOW_VIDEO, video: false});
-		return ;
-	    }*/ // TODO: error gestion
-	   
+	    video.view += 1;
+	    video.save(function(err) {if (err) reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: /videoStream Video.save: add view", err);});
 	    res.sendfile(global.PATH_API + '/' + video.path, function (err) {
 		if (err)
 		    reporting.saveErrorAPI(constantes.TYPE_ERROR_STREAM, "app/routes/video.js: /videoStream sendFile ", err);
@@ -171,39 +168,114 @@ module.exports = function(app, passport, isLoggedIn) {
     });
 
     app.post('/upload', function(req, res) {
-	    console.log("upload");
-	    var form = new formidable.IncomingForm();
-	    var files = [];
-	    var fields = [];
+	    console.log(req.body);
 
-	    form.uploadDir = global.PATH_API + "/tmp/";
+	    if (typeof req.body.title === 'undefined') {
+		res.status(400).send({message: constantes.ERROR_TITLE_REQUIRE});
+		return ;
+	    }
 
-	    form.parse(req, function(err, fields, files) {
-		    if (err)
-			throw err;
-		    console.log(fields);
-		    console.log(files);
-		    res.send();
-		});
+	    if (typeof req.body.path === 'undefined') {
+		res.status(400).send({message: constantes.ERROR_VIDEO_REQUIRE});
+		return ;
+	    }
 
-	    /*
-	    form
-		.on('field', function(field, value) {
-			console.log(field, value);
-			fields.push([field, value]);
-		    })
-		.on('file', function(field, file) {
-			console.log(field, file);
-			files.push([field, file]);
-		    })
-		.on('end', function() {
-			console.log('-> upload done');
-			res.send();
-			//res.writeHead(200, {'content-type': 'text/plain'});
-			//res.write('received fields:\n\n '+util.inspect(fields));
-			//res.write('\n\n');
-			//res.end('received files:\n\n '+util.inspect(files));
+	    if (typeof req.body.idChannel === 'undefined') {
+		res.status(400).send({message: constantes.ERROR_ID_CHANNEL_REQUIRE});
+		return ;
+	    }
+	    if (!mongoose.Types.ObjectId.isValid(req.body.idChannel)) {
+		res.status(400).send({message: constantes.ERROR_ID_CHANNEL_INVALID});
+		return ;
+	    }
+
+	    var newVideo = new Video();
+
+	    var videoURI = constantes.PATH_FOLDER_VIDEO + newVideo._id;
+
+	    newVideo.title = req.body.title;
+	    if (typeof req.body.description === 'undefined')
+		newVideo.description = "";
+	    else
+		newVideo.description = req.body.description;
+	    newVideo.path = videoURI + '.' + req.body.path.split('.').pop();
+	    newVideo.pathType.mp4 = videoURI + ".mp4";
+	    newVideo.pathType.webm = videoURI + ".webm";
+	    newVideo.pathType.ogg = videoURI + ".ogg";
+	    newVideo.idUser = req.user._id;
+	    newVideo.idChannel = req.body.idChannel;
+
+	    fs.ensureDir(global.PATH_API + constantes.PATH_FOLDER_VIDEO, function(err) {
+		    if (err) {
+			reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /upload fs.ensureDir()", err);
+			res.status(500).send({message: constantes.ERROR_API});
+			return ;
+		    }
+		    fs.copy(req.body.path, global.PATH_API + newVideo.path, function(err) {
+			    if (err) {
+				reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /upload fs.move()", err);
+				res.status(500).send({message: constantes.ERROR_API});
+				return ;
+			    }
+			    
+			    if (req.body.path.split('.').pop() !== 'mp4')
+				ffmpeg(req.body.path).format('mp4')
+				    .on('error', function(err) {
+					    console.log('Cannot process video: ' + err.message);
+					})
+				    .on('end', function() {
+					    console.log('Processing finished successfully');
+					})
+				    .saveToFile(global.PATH_API + videoURI + '.mp4');
+
+			    if (req.body.path.split('.').pop() !== 'webm')
+				ffmpeg(req.body.path).format('webm')
+				    .on('error', function(err) {
+					    console.log('Cannot process video: ' + err.message);
+					})
+				    .on('end', function() {
+					    console.log('Processing finished successfully');
+					})
+				    .saveToFile(global.PATH_API + videoURI + '.webm');
+
+			    if (req.body.path.split('.').pop() !== 'ogg')
+				ffmpeg(req.body.path).format('ogg')
+				    .on('error', function(err) {
+					    console.log('Cannot process video: ' + err.message);
+					})
+				    .on('end', function() {
+					    console.log('Processing finished successfully');
+					})
+				    .saveToFile(global.PATH_API + videoURI + '.ogg');
+
+			    newVideo.save(function(err) {
+				    if (err) {
+					reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /upload Video.save()", err);
+					res.status(500).send({message: constantes.ERROR_API_DB});
+					return ;
+				    }
+				    res.send();
+				});  
+			})
+			});
+	});
+
+    app.post('/uploadVideo', multipartMiddleware, function(req, res) {
+	    var file = req.files.file;
+
+	    if (file.size > constantes.VIDEO_MAX_SIZE) {
+		res.status(400).send(constantes.ERROR_VIDEO_SIZE_TOO_BIG);
+		fs.unlink(file.path, function (err) {
+			if (err) reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /uploadVideo fs.unlink()", err);
 		    });
-		    form.parse(req);*/
+	    }
+	    else if (!_.contains(constantes.SupportedTypes, file.type)) {
+		res.status(400).send(constantes.ERROR_UNSUPPORTED_TYPE + file.type);
+		fs.unlink(file.path, function (err) {
+			if (err) reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /uploadVideo fs.unlink()", err);
+		    });
+	    }
+	    else
+		res.send({path: file.path});
 	});
 };
