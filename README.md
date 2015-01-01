@@ -12,6 +12,8 @@ TODO
 ----
 
 * multisource video support
+* video image
+* video duration
 * public user profile
 * private user profile: update video, delete video
 * search video
