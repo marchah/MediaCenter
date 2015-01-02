@@ -145,14 +145,6 @@ mediacenterControllers.controller('ProfileCtrl', ['$scope', '$rootScope', '$http
 	  if (typeof $scope.user === 'undefined')
 	      $location.url('/news');
 	  $scope.name = $scope.user["name"];
-		/*$http.get('/loggedin').success(function(user){
-		    if (user !== '0') {
-			$rootScope.user = user;
-			return true;
-		    }
-		    else
-			return false;
-			});*/
 
 	    $scope.update = function() {
 		$scope.errorMessage = "";
@@ -174,19 +166,33 @@ mediacenterControllers.controller('ProfileCtrl', ['$scope', '$rootScope', '$http
 	}]);
 
 
+mediacenterControllers.controller('PublicProfileCtrl', ['$scope', '$http', '$routeParams', 'Settings',
+	function ($scope, $http, $routeParams, Settings) {
+
+	  $http.get(Settings.apiUri + 'user/' + $routeParams.userId).success(function(data) {
+		  $scope.user = data.user;
+		  $scope.videos = data.videos;
+		  if (typeof data.videos !== 'undefined' && data.videos != false)
+		      $scope.countVideos = data.videos.length;
+		  else
+		      $scope.countVideos = 0;
+		  $scope.videoImageUri = Settings.apiUri + "video/picture/";
+		  /*	      $scope.video = data.video;
+	      console.log(data.video);
+	      $scope.videoURL = $sce.trustAsResourceUrl(Settings.apiUri + "videoStream/" + data.video._id);
+	      console.log($scope.videoURL);
+	      if (!data.video)
+		  alert(data.message);*/
+	  });
+
+	}]);
+
+
 mediacenterControllers.controller('UploadCtrl', ['$scope', '$rootScope', '$http', '$location', '$upload', 'Settings',
        function ($scope, $rootScope, $http, $location, $upload, Settings) {
 
 	     if (typeof $scope.user === 'undefined')
 		 $location.url('/news');
-		/*$http.get('/loggedin').success(function(user){
-		    if (user !== '0') {
-			$rootScope.user = user;
-			return true;
-		    }
-		    else
-			return false;
-			});*/
 					  
 	  $scope.VideoTypeSupported = Settings.Upload.TypeSupported;
 	  

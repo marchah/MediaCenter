@@ -4,6 +4,7 @@ var constantes = require(global.PATH_API + '/config/constantes.js');
 var reporting = require(global.PATH_API + '/app/tools/reporting.js');
 
 var User       = require(global.PATH_API + '/app/models/user');
+var Video      = require(global.PATH_API + '/app/models/video');
 
 module.exports = function(app, passport, isLoggedIn) {
 
@@ -20,6 +21,35 @@ module.exports = function(app, passport, isLoggedIn) {
 	    return ;
 	});
     });
+
+    app.get('/user/:userId', function(req, res) {
+	    User.findOne({_id: req.params.userId}, {name: true, inscriptionDate: true}, function(err, user) {
+		    if (err) {
+			reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/user.js: /user/userId User.findOne()", err);
+			res.setHeader('Content-Type', 'application/json');
+			res.json({message: constantes.ERROR_API_DB, user: false, videos: false});
+			return ;
+		    }
+		    if (user == null) {
+			res.setHeader('Content-Type', 'application/json');
+			res.json({message: constantes.ERROR_UNKNOW_USER, user: false, videos: false});
+			return ;
+		    }
+		    Video.find({idUser: user._id}, {title: true, description: true, duration: true, pathImage: true}, function(err, videos) {
+			    if (err) {
+				reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/user.js: /user/userId Video.find()", err);
+				res.send({user: user, videos: false});
+				return ;
+			    }
+
+			    for (index in videos) {
+				if (videos[index].description.length > constantes.SIZE_MAX_DESCRIPTION_LIST_VIDEO)
+				    videos[index].description = videos[index].description.substr(0, constantes.SIZE_MAX_DESCRIPTION_LIST_VIDEO) + '...';
+			    }
+			    res.send({user: user, videos: videos});
+			});
+		});
+	});
 
     app.post('/user', isLoggedIn, function(req, res) {
 	    if (!Validator.isLength(req.body.name, constantes.SIZE_MIN_NAME, constantes.SIZE_MAX_NAME))

@@ -49,6 +49,7 @@ define("AUTHENTIFICATION_SUCCESS", "Connection success.");
 
 define("ERROR_UNKNOW_VIDEO", "Unknow video.");
 define("ERROR_UNKNOW_CHANNEL", "Unknow channel.");
+//define("ERROR_UNKNOW_USER", "Unknow user.");
 //define("DEFAULT_VALUE_CHANNEL", "Unknow");
 
 

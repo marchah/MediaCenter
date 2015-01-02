@@ -35,6 +35,10 @@ mediacenterApp.config(['$routeProvider',
 			templateUrl: 'partials/user-list.html',
 			controller: 'UserListCtrl'
 		    }).
+		    when('/user/:userId', {
+			templateUrl: 'partials/public-profile.html',
+			controller: 'PublicProfileCtrl'
+		    }).
 		    when('/news', {
 			templateUrl: 'partials/news-list.html',
 			controller: 'NewsListCtrl'
