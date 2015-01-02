@@ -56,6 +56,7 @@ define("ERROR_UNKNOW_CHANNEL", "Unknow channel.");
 
 define("PATH_FOLDER_TMP_VIDEO", "/tmp/");
 define("PATH_FOLDER_VIDEO", "/video/");
+define("PATH_FOLDER_IMAGE", "/picture/");
 define("VIDEO_MAX_SIZE", 100 * 1024 * 1024 );
 
 define("SupportedTypes", ['video/mp4', 'video/webm', 'video/ogg']);

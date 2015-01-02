@@ -19,7 +19,7 @@ module.exports = {
 	    nbVideoPerPage = constantes.DEFAULT_NB_VIDEO_PER_PAGE;*/
 nbVideoPerPage = 1;
 
-	Video.find(searchQuery, {title: true, description: true, duration: true}, {skip: (numPage-1) * nbVideoPerPage, limit: nbVideoPerPage}, function(err, videos) {
+	Video.find(searchQuery, {title: true, description: true, duration: true, pathImage: true}, {skip: (numPage-1) * nbVideoPerPage, limit: nbVideoPerPage}, function(err, videos) {
 	    if (err) {
 		reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/tools/search.js: searchVideo Video.find", err);
 		res.setHeader('Content-Type', 'application/json');
@@ -28,7 +28,6 @@ nbVideoPerPage = 1;
 	    }
 	    
 	    for (index in videos) {
-		videos[index].pathImage = "picture/1.jpg";
 		if (videos[index].description.length > constantes.SIZE_MAX_DESCRIPTION_LIST_VIDEO)
 		    videos[index].description = videos[index].description.substr(0, constantes.SIZE_MAX_DESCRIPTION_LIST_VIDEO) + '...';
 	    }

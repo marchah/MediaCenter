@@ -115,7 +115,7 @@ module.exports = function(app, passport, isLoggedIn) {
     });
 
     app.get('/video/picture/:name', function(req, res) {
-	res.sendfile(global.PATH_API + '/picture/' + req.params.name, function (err) {
+       res.sendfile(global.PATH_API + '/picture/' + req.params.name + ".png", function (err) {
 	    if (err) {
 		console.log("sendFile err: " + err);
 		reporting.saveErrorAPI(constantes.TYPE_ERROR_STREAM, "app/routes/video.js: /video/picture/ sendFile ", err);
@@ -147,7 +147,7 @@ module.exports = function(app, passport, isLoggedIn) {
     });
 
     app.get('/news', function(req, res) {
-	Video.find({}, {title: true, description: true, duration: true}, {sort: {date: 'desc'}, limit: constantes.LIMIT_NB_NEWS}, function(err, videos) {
+	    Video.find({}, {title: true, description: true, duration: true, pathImage: true}, {sort: {date: 'desc'}, limit: constantes.LIMIT_NB_NEWS}, function(err, videos) {
 	    if (err) {
 		reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /news Video.find()", err);
 		res.setHeader('Content-Type', 'application/json');
@@ -156,7 +156,6 @@ module.exports = function(app, passport, isLoggedIn) {
 	    }
 
 	    for (index in videos) {
-		videos[index].pathImage = "picture/1.jpg";
 		if (videos[index].description.length > constantes.SIZE_MAX_DESCRIPTION_LIST_VIDEO)
 		    videos[index].description = videos[index].description.substr(0, constantes.SIZE_MAX_DESCRIPTION_LIST_VIDEO) + '...';
 	    }
@@ -249,17 +248,34 @@ module.exports = function(app, passport, isLoggedIn) {
 				    .saveToFile(global.PATH_API + videoURI + '.ogg');
 
 
-			    ffmpeg.ffprobe(global.PATH_API + newVideo.path, function(err, metadata) {
-				    if (!err)
-					newVideo.duration = Math.ceil(metadata.format.duration);				    
-				    newVideo.save(function(err) {
-					    if (err) {
-						reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /upload Video.save()", err);
-						res.status(500).send({message: constantes.ERROR_API_DB});
-						return ;
-					    }
-					    res.send();
-					});
+			    fs.ensureDir(global.PATH_API + constantes.PATH_FOLDER_IMAGE, function(err) {
+				    if (err) {
+					reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /upload fs.ensureDir(PATH_FOLDER_IMAGE)", err);
+				    }
+				    else {
+					newVideo.pathImage = constantes.PATH_FOLDER_IMAGE + newVideo._id + ".png";
+
+					ffmpeg(global.PATH_API + newVideo.path)
+					    .screenshots({
+						    timestamps: ['5%'],
+							filename: newVideo._id + '.png',
+							folder: global.PATH_API + constantes.PATH_FOLDER_IMAGE,
+							size: '320x240'
+					    });
+				    }
+
+				    ffmpeg.ffprobe(global.PATH_API + newVideo.path, function(err, metadata) {
+					    if (!err)
+						newVideo.duration = Math.ceil(metadata.format.duration);				    
+					    newVideo.save(function(err) {
+						    if (err) {
+							reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /upload Video.save()", err);
+							res.status(500).send({message: constantes.ERROR_API_DB});
+							return ;
+						    }
+						    res.send();
+						});
+				});
 				});
 			})
 			});

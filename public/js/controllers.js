@@ -18,7 +18,7 @@ mediacenterControllers.controller('VideoListCtrl', ['$scope', '$routeParams', '$
 		    $scope.nbPages = Math.ceil(data.count / data.videos.length);
 		else
 		    $scope.nbPages = 0;
-		$scope.videoImageUri = Settings.apiUri + "video/";
+		$scope.videoImageUri = Settings.apiUri + "video/picture/";
 		$scope.idChannel = idChannel;
 		$scope.getNumber = function(num) {
 		    return new Array(num);
@@ -58,7 +58,7 @@ mediacenterControllers.controller('NewsListCtrl', ['$scope', '$http', 'Settings'
 	function ($scope, $http, Settings) {
 	    $http.get(Settings.apiUri + 'news').success(function(data) {
 		$scope.news = data.news;
-		$scope.videoImageUri = Settings.apiUri + "video/";
+		$scope.videoImageUri = Settings.apiUri + "video/picture/";
 	    });
 	}]);
 
