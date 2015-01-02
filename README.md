@@ -14,6 +14,7 @@ TODO
 * multisource video support
 * video image
 * video duration
+* get authentication when user reload page
 * public user profile
 * private user profile: update video, delete video
 * search video
