@@ -14,7 +14,7 @@ TODO
 ----
 
 * multisource video support
-* video image
+* ~~video image~~
 * ~~video duration~~
 * get authentication when user reload page
 * public user profile
