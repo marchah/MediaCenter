@@ -248,14 +248,19 @@ module.exports = function(app, passport, isLoggedIn) {
 					})
 				    .saveToFile(global.PATH_API + videoURI + '.ogg');
 
-			    newVideo.save(function(err) {
-				    if (err) {
-					reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /upload Video.save()", err);
-					res.status(500).send({message: constantes.ERROR_API_DB});
-					return ;
-				    }
-				    res.send();
-				});  
+
+			    ffmpeg.ffprobe(global.PATH_API + newVideo.path, function(err, metadata) {
+				    if (!err)
+					newVideo.duration = Math.ceil(metadata.format.duration);				    
+				    newVideo.save(function(err) {
+					    if (err) {
+						reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /upload Video.save()", err);
+						res.status(500).send({message: constantes.ERROR_API_DB});
+						return ;
+					    }
+					    res.send();
+					});
+				});
 			})
 			});
 	});
