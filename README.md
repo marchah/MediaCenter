@@ -21,4 +21,3 @@ TODO
 * private user profile: update video, delete video
 * search video
 * style
-* check where come from the weird folder if it appear again.
