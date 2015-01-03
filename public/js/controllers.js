@@ -31,9 +31,7 @@ mediacenterControllers.controller('VideoDetailCtrl', ['$scope', '$sce', '$routeP
 
 	  $http.get(Settings.apiUri + 'video/' + $routeParams.videoId).success(function(data) {
 	      $scope.video = data.video;
-	      console.log(data.video);
 	      $scope.videoURL = $sce.trustAsResourceUrl(Settings.apiUri + "videoStream/" + data.video._id);
-	      console.log($scope.videoURL);
 	      if (!data.video)
 		  alert(data.message);
 	  });
@@ -256,7 +254,7 @@ mediacenterControllers.controller('PublicProfileCtrl', ['$scope', '$http', '$rou
 	}]);
 
 
-mediacenterControllers.controller('UploadCtrl', ['$scope', '$rootScope', '$http', '$location', '$upload', 'Settings',
+mediacenterControllers.controller('VideoCreateCtrl', ['$scope', '$rootScope', '$http', '$location', '$upload', 'Settings',
        function ($scope, $rootScope, $http, $location, $upload, Settings) {
 
 	     if (typeof $scope.user === 'undefined')
@@ -309,11 +307,14 @@ mediacenterControllers.controller('UploadCtrl', ['$scope', '$rootScope', '$http'
 		    idChannel: $scope.video.idChannel,
 		    path: $scope.path
 		})
-		.success(function(){
-			console.log("success");
+		.success(function(data){
+			$scope.errorMessage = data.message;
 		    })
 		.error(function(data, status, headers, config){
-			$scope.errorMessage = "Upload failed: " + data.message;
+			if (typeof data.message !== 'undefined')
+			    $scope.errorMessage = "Upload failed: " + data.message;
+			else
+			    $scope.errorMessage = "Upload failed: " + data;
 		    });
 	    };
 	}]);

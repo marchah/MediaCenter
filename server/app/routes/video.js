@@ -251,7 +251,7 @@ module.exports = function(app, passport, isLoggedIn) {
 	});
     });
 
-    app.post('/video', function(req, res) {
+    app.post('/video', isLoggedIn, function(req, res) {
 
 	    if (typeof req.body.title === 'undefined') {
 		res.status(400).send({message: constantes.ERROR_TITLE_REQUIRE});
@@ -357,7 +357,7 @@ module.exports = function(app, passport, isLoggedIn) {
 							res.status(500).send({message: constantes.ERROR_API_DB});
 							return ;
 						    }
-						    res.send();
+						    res.send({message: constantes.REQUEST_API_SUCCESS});
 						});
 				});
 				});
