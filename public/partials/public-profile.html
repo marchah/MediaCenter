@@ -1,0 +1,28 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2">
+      <!--Sidebar content-->
+    </div>
+    <div class="col-md-10">
+      <!--Body content-->
+
+      <h2>{{user.name}}</h2>
+      <div>
+	<label>Inscription Date</label>
+	<p>{{user.inscriptionDate}}</p>
+      </div>
+      <div>
+	<label>Number Video</label>
+	<p>{{countVideos}}</p>
+      </div>
+      <ul>
+        <li ng-repeat="video in videos">
+          <a href="#/video/{{video._id}}"><img ng-src="{{videoImageUri}}{{video._id}}" />{{video.imageUrl}}</a>
+          <a href="#/video/{{video._id}}">{{video.title}}</a>
+          <p>{{video.description}}</p>
+          <p>{{video.duration}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

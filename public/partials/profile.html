@@ -35,5 +35,17 @@
 	<p>{{errorMessage}}</p>
       </form>
     </div>
+    <div>
+      <h2>Videos</h2>
+      <ul>
+        <li ng-repeat="video in videos">
+          <a href="#/video/{{video._id}}"><img ng-src="{{videoImageUri}}{{video._id}}" />{{video.imageUrl}}</a>
+          <a href="#/video/{{video._id}}">{{video.title}}</a>
+          <p>{{video.description}}</p>
+          <p>{{video.duration}}</p>
+	  <p><a href="#/edit/{{video._id}}">Edit</a></p>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>

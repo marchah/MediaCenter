@@ -114,6 +114,91 @@ module.exports = function(app, passport, isLoggedIn) {
 	});
     });
 
+    app.put('/video/:idVideo', isLoggedIn, function(req, res) {
+	    Video.findOne({_id: req.params.idVideo}, function(err, video) {
+		    if (err) {
+			reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: PUT /video/:idVideo Video.findOne", err);
+			res.status(500).send({message: constantes.ERROR_API_DB});
+			return ;
+		    }
+		    if (video == null) {
+			reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: PUT /video/:idVideo Video.findOne", err);
+			res.status(500).send({message: constantes.ERROR_UNKNOW_VIDEO, video: false});
+			return ;
+		    }
+		    if (!req.user._id.equals(video.idUser)) {
+			res.send(401);
+			return ;
+		    }
+		    if (typeof req.body.title === 'undefined') {
+			res.status(400).send({message: constantes.ERROR_TITLE_REQUIRE});
+			return ;
+		    }
+
+		    if (typeof req.body.idChannel === 'undefined') {
+			res.status(400).send({message: constantes.ERROR_ID_CHANNEL_REQUIRE});
+			return ;
+		    }
+
+		    if (!mongoose.Types.ObjectId.isValid(req.body.idChannel)) {
+			res.status(400).send({message: constantes.ERROR_ID_CHANNEL_INVALID});
+			return ;
+		    }
+
+		    video.title = req.body.title;
+		    if (typeof req.body.description === 'undefined')
+			video.description = "";
+		    else
+			video.description = req.body.description;
+		    video.idChannel = req.body.idChannel;
+		    video.save(function(err) {
+			    if (err) {
+				reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: PUT /video/:idVideo Video.save", err);
+				res.status(500).send({message: constantes.ERROR_API_DB});
+				return ;
+			    }
+			    res.send({message: constantes.REQUEST_API_SUCCESS});
+			});
+		}); 
+	});
+
+    app.delete('/video/:idVideo', isLoggedIn, function(req, res) {
+	    Video.findOne({_id: req.params.idVideo}, function(err, video) {
+		    if (err) {
+			reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: PUT /video/:idVideo Video.findOne", err);
+			res.status(500).send({message: constantes.ERROR_API_DB});
+			return ;
+		    }
+		    if (video == null) {
+			reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: PUT /video/:idVideo Video.findOne", err);
+			res.status(500).send({message: constantes.ERROR_UNKNOW_VIDEO, video: false});
+			return ;
+		    }
+		    if (!req.user._id.equals(video.idUser)) {
+			res.send(401);
+			return ;
+		    }   
+		    var videoURI = constantes.PATH_FOLDER_VIDEO + video._id;
+		    fs.unlink(global.PATH_API + video.path, function (err) {
+			    if (err) reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: DELETE /video/:idVideo unlink video.path", err); 
+			});
+		    fs.unlink(global.PATH_API + videoURI + ".mp4", function (err) {
+			    if (err) reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: DELETE /video/:idVideo unlink .mp4", err); 
+			});
+		    fs.unlink(global.PATH_API + videoURI + ".webm", function (err) {
+			    if (err) reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: DELETE /video/:idVideo unlink .webm", err); 
+			});
+		    fs.unlink(global.PATH_API + videoURI + ".ogg", function (err) {
+			    if (err) reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: DELETE /video/:idVideo unlink .ogg", err); 
+			});
+		    fs.unlink(global.PATH_API + constantes.PATH_FOLDER_IMAGE + video._id + ".png", function (err) {
+			    if (err) reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: DELETE /video/:idVideo unlink .png", err); 
+			});
+		    video.remove();
+		    res.send({message: constantes.REQUEST_API_SUCCESS});
+		}); 
+	});
+
     app.get('/video/picture/:name', function(req, res) {
        res.sendfile(global.PATH_API + '/picture/' + req.params.name + ".png", function (err) {
 	    if (err) {
@@ -166,8 +251,7 @@ module.exports = function(app, passport, isLoggedIn) {
 	});
     });
 
-    app.post('/upload', function(req, res) {
-	    console.log(req.body);
+    app.post('/video', function(req, res) {
 
 	    if (typeof req.body.title === 'undefined') {
 		res.status(400).send({message: constantes.ERROR_TITLE_REQUIRE});

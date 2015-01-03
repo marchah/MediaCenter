@@ -6,9 +6,11 @@
     <div class="col-md-10">
       <!--Body content-->
 
-
-      <h2>Upload</h2>
-      <form ng-submit="upload()">
+      <h2>Edit Video</h2>
+      <form ng-submit="update()">
+	<p>
+	  <img ng-src="{{videoImageUri}}{{video._id}}" />
+	</p>
 	<p>
 	  <label>Title*</label>
 	  <input type="text" placeholder="Title" ng-model="video.title" ng-required="true" />
@@ -23,15 +25,13 @@
 	  </select>
 	</p>
 	<p>
-	  <label>Video*</label>
-	  <input type="file" ng-file-select="onFileSelect($files)" ng-model="video.src"  ng-required="true" accept="{{VideoTypeSupported}}" />
-	  <p>{{processing}}</p>
-	</p>
-	<p>
 	  <button type="submit">Upload</button>
 	</p>
-	<p>{{errorMessage}}</p>
       </form>
+	<p>
+	  <button ng-click="delete()">Delete</button>
+	</P>
+	<p>{{message}}</p>
+      <div>
+      </div>
     </div>
-  </div>
-</div>

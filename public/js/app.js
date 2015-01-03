@@ -27,6 +27,10 @@ mediacenterApp.config(['$routeProvider',
 			templateUrl: 'partials/video-detail.html',
 			controller: 'VideoDetailCtrl'
 		    }).
+		    when('/edit/:videoId', {
+			templateUrl: 'partials/video-edit.html',
+			controller: 'VideoEditCtrl'
+		    }).
 		    when('/channels', {
 			templateUrl: 'partials/channel-list.html',
 			controller: 'ChannelListCtrl'

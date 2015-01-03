@@ -40,6 +40,69 @@ mediacenterControllers.controller('VideoDetailCtrl', ['$scope', '$sce', '$routeP
       }]);
 
 
+mediacenterControllers.controller('VideoEditCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$location', '$window', 'Settings',
+    function ($scope, $rootScope, $routeParams, $http, $location, $window, Settings) {
+
+	  if (typeof $scope.user === 'undefined')
+	      $location.url('/news');
+	  else {
+	  $scope.name = $scope.user["name"];
+
+	  $http.get(Settings.apiUri + 'video/' + $routeParams.videoId).success(function(data) {
+		  if ($scope.user._id !== data.video.idUser)
+		      $location.url('/news');
+		  $scope.video = data.video;
+		  $scope.videoImageUri = Settings.apiUri + "video/picture/";
+		  if (!data.video)
+		      alert(data.message);
+	  });
+
+	  $http.get(Settings.apiUri + 'channels').success(function(data) {
+		  $scope.channels = data.channels;
+		  $scope.video = {idChannel: data.channels[0]._id};
+	      });
+
+	  $scope.delete = function() {
+	      $scope.message = "";
+
+	      var deleteVideo = $window.confirm('Are you sure to delete this video?');
+
+	      if (deleteVideo) {
+		  $http.delete(Settings.apiUri + 'video/' + $scope.video._id)
+		      .success(function(data){
+			      $location.url('/profile');
+			  })
+		      .error(function(data){
+			      if (typeof data.message !== 'undefined')
+				  $scope.message = data.message;
+			      else
+				  $scope.message = data;
+			  });
+	      }
+	  };
+
+	  $scope.update = function() {
+	      $scope.message = "";
+	      
+	      $http.put(Settings.apiUri + 'video/' + $scope.video._id, {
+		    title: $scope.video.title,
+		    description: $scope.video.description,
+		    idChannel: $scope.video.idChannel
+		})
+		.success(function(data){
+			$scope.message = data.message;
+		    })
+		.error(function(data, status, headers, config){
+			if (typeof data.message !== 'undefined')
+			    $scope.message = data.message;
+			else
+			    $scope.message = data;
+		    });
+	    };
+	  }
+	}]);
+
+
 mediacenterControllers.controller('ChannelListCtrl', ['$scope', '$http', 'Settings',
 	function ($scope, $http, Settings) {
 	    $http.get(Settings.apiUri + 'channels').success(function(data) {
@@ -146,6 +209,17 @@ mediacenterControllers.controller('ProfileCtrl', ['$scope', '$rootScope', '$http
 	      $location.url('/news');
 	  $scope.name = $scope.user["name"];
 
+
+	  $http.get(Settings.apiUri + 'user/' + $scope.user._id).success(function(data) {
+		  $scope.user = data.user;
+		  $scope.videos = data.videos;
+		  if (typeof data.videos !== 'undefined' && data.videos != false)
+		      $scope.countVideos = data.videos.length;
+		  else
+		      $scope.countVideos = 0;
+		  $scope.videoImageUri = Settings.apiUri + "video/picture/";
+	  });
+
 	    $scope.update = function() {
 		$scope.errorMessage = "";
 		if ($scope.user.password != $scope.user.password2) {
@@ -177,12 +251,6 @@ mediacenterControllers.controller('PublicProfileCtrl', ['$scope', '$http', '$rou
 		  else
 		      $scope.countVideos = 0;
 		  $scope.videoImageUri = Settings.apiUri + "video/picture/";
-		  /*	      $scope.video = data.video;
-	      console.log(data.video);
-	      $scope.videoURL = $sce.trustAsResourceUrl(Settings.apiUri + "videoStream/" + data.video._id);
-	      console.log($scope.videoURL);
-	      if (!data.video)
-		  alert(data.message);*/
 	  });
 
 	}]);
@@ -235,7 +303,7 @@ mediacenterControllers.controller('UploadCtrl', ['$scope', '$rootScope', '$http'
 		    return ;
 		}
 
-		$http.post(Settings.apiUri + 'upload', {
+		$http.post(Settings.apiUri + 'video', {
 		    title: $scope.video.title,
 		    description: $scope.video.description,
 		    idChannel: $scope.video.idChannel,
