@@ -19,6 +19,6 @@ TODO
 * get authentication when user reload page
 * ~~public user profile~~
 * upload video message success/erreur
-* private user profile: update video, delete video
+* ~~private user profile: update video, delete video~~
 * search video
 * style
