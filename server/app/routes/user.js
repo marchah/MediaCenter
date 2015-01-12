@@ -23,7 +23,11 @@ module.exports = function(app, passport, isLoggedIn) {
     });
 
     app.get('/user/:userId', function(req, res) {
-	    User.findOne({_id: req.params.userId}, {name: true, inscriptionDate: true}, function(err, user) {
+
+	var fields = {name: true, inscriptionDate: true};
+	if (typeof req.user !== 'undefined' && req.params.userId == req.user.id)
+	    fields = {name: true, "local.login": true, "local.email": true, inscriptionDate: true};
+	User.findOne({_id: req.params.userId}, fields, function(err, user) {
 		    if (err) {
 			reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/user.js: /user/userId User.findOne()", err);
 			res.setHeader('Content-Type', 'application/json');

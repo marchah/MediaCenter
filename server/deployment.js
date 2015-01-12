@@ -99,9 +99,9 @@ var video = function() {
 
 };
 
-//user();
+user();
 //channel();
-video();
+//video();
 
 console.log("Ctrl + c for exit");
 
