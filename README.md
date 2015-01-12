@@ -4,11 +4,12 @@ MediaCenter
 Usage
 -----
 
-Require FFMPEG and FFPROGE
+Require FFMPEG and FFPROBE
 
 Install FFMPEG
 ````
-sudo apt-get install libavcodec53 libavdevice53 libavformat53 libavutil51 libpostproc52 libswscale2 ffmpeg
+sudo add-apt-repository ppa:jon-severinsson/ffmpeg && sudo apt-get update -qq
+sudo apt-get install libavdevice53 libpostproc52 libswscale2 ffmpeg ffprobe
 ````
 TODO
 ----
