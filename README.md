@@ -28,7 +28,7 @@ apt-get -y install mongodb
 
 Require FFMPEG and FFPROBE
 
-Install FFMPEG
+Install FFMPEG and FFPROBE
 ````
 sudo add-apt-repository ppa:jon-severinsson/ffmpeg && sudo apt-get update -qq
 sudo apt-get install ffmpeg
