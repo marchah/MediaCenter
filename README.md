@@ -23,3 +23,5 @@ TODO
 * ~~private user profile: update video, delete video~~
 * search video
 * style
+* Bonus: video comments
+* Bonus: video tags
