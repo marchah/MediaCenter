@@ -127,6 +127,17 @@ mediacenterControllers.controller('UserListCtrl', ['$scope', '$http', 'Settings'
 	    });
 	}]);
 
+mediacenterControllers.controller('SessionCtrl', ['$scope', '$rootScope', '$http', 'Settings',
+	function ($scope, $rootScope, $http, Settings) {
+	    if (typeof $rootScope.user === 'undefined' || $rootScope.user == false)
+		$http.get('/loggedin').success(function(user){
+			if (typeof user !== 'undefined' && user != '0')
+			    $rootScope.user = user;
+			else
+			    $rootScope.user = undefined;
+		    });
+	}]);
+
 mediacenterControllers.controller('NewsListCtrl', ['$scope', '$http', 'Settings',
 	function ($scope, $http, Settings) {
 	    $http.get(Settings.apiUri + 'news').success(function(data) {
@@ -141,14 +152,6 @@ mediacenterControllers.controller('LoginCtrl', ['$scope', '$rootScope', '$http',
 	    $scope.isLoggin = function() {
 		if (typeof $scope.user !== 'undefined')
 		    return true;
-		/*$http.get('/loggedin').success(function(user){
-		    if (user !== '0') {
-			$rootScope.user = user;
-			return true;
-		    }
-		    else
-			return false;
-			});*/
 		return false;
 	    };
 	    $scope.login = function() {

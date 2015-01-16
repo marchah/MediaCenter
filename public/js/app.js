@@ -77,7 +77,7 @@ mediacenterApp.constant('Settings', {
 	apiUri: '/',
 	Upload: {
 	    MaxSize: 100 * 1024 * 1024,
-	    TypeSupported: "video/mp4"
+	    TypeSupported: "video/mp4, video/webm, video/avi"
 	},
 	Message: {
 	    NoVideoUploadSelected: "Please select a video to upload",

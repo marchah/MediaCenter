@@ -60,7 +60,7 @@ define("PATH_FOLDER_VIDEO", "/video/");
 define("PATH_FOLDER_IMAGE", "/picture/");
 define("VIDEO_MAX_SIZE", 100 * 1024 * 1024 );
 
-define("SupportedTypes", ['video/mp4', 'video/webm', 'video/ogg']);
+define("SupportedTypes", ['video/mp4', 'video/webm', 'video/avi']);
 define("ERROR_TITLE_REQUIRE", "Title Required");
 define("ERROR_ID_CHANNEL_REQUIRE", "IdChannel Required");
 define("ERROR_ID_CHANNEL_INVALID", "Invalid idChannel");
