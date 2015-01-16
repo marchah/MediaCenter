@@ -43,6 +43,14 @@ sudo add-apt-repository ppa:jon-severinsson/ffmpeg && sudo apt-get update -qq
 sudo apt-get install libavdevice53 libpostproc52 libswscale2 ffmpeg ffprobe
 ````
 
+Install MediaCenter
+````
+git clone https://github.com/marchah/MediaCenter
+cd MediaCenter
+sudo npm install
+````
+
+
 Usage
 -----
 
