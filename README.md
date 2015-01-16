@@ -31,7 +31,7 @@ Require FFMPEG and FFPROBE
 Install FFMPEG
 ````
 sudo add-apt-repository ppa:jon-severinsson/ffmpeg && sudo apt-get update -qq
-sudo apt-get install libavdevice53 libpostproc52 libswscale2 ffmpeg ffprobe
+sudo apt-get install libavdevice53 libpostproc52 libswscale2 ffmpeg
 ````
 
 Install MediaCenter
