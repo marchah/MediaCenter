@@ -4,6 +4,20 @@ MediaCenter
 Usage
 -----
 
+Install NodeJS
+
+https://github.com/joyent/node/wiki/installing-node.js-via-package-manager
+
+Install Bower
+
+````
+npm install -g bower
+````
+
+Install MongoBD
+
+http://tuts.syrinxoon.net/tuts/installation-et-bases-de-mongodb
+
 Require FFMPEG and FFPROBE
 
 Install FFMPEG
