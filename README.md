@@ -14,7 +14,7 @@ sudo apt-get install libavdevice53 libpostproc52 libswscale2 ffmpeg ffprobe
 TODO
 ----
 
-* multisource video support
+* ~~multisource video support~~
 * ~~video image~~
 * ~~video duration~~
 * get authentication when user reload page
