@@ -24,7 +24,7 @@
 	</p>
 	<p>
 	  <label>Video*</label>
-	  <input type="file" ng-file-select="onFileSelect($files)" ng-model="video.src"  ng-required="true" accept="{{VideoTypeSupported}}" />
+	  <input type="file" ng-Change="onFileSelect(this)" ng-file-select="onFileSelect(this)" ng-model="video.src"  ng-required="true" accept="{{VideoTypeSupported}}" />
 	  <p>Supported format: .mp4, .webm and .avi</p>
 	  <p>{{processing}}</p>
 	</p>
