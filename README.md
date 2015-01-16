@@ -7,10 +7,6 @@ Install
 Install NodeJS
 
 ````
-sudo apt-get install nodejs
-````
-Or
-````
 curl -sL https://deb.nodesource.com/setup | sudo bash -
 sudo apt-get install -y nodejs
 ````
@@ -23,11 +19,6 @@ sudo npm install -g bower
 ````
 
 Install MongoBD
-
-````
-sudo apt-get install mongodb
-````
-Or
 ````
 apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
 echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | tee -a /etc/apt/sources.list.d/10gen.list
