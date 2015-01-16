@@ -25,3 +25,4 @@ TODO
 * style
 * Bonus: video comments
 * Bonus: video tags
+* Bonus signin Facebook/twitter/google+
