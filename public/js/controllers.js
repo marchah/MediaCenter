@@ -26,12 +26,24 @@ mediacenterControllers.controller('VideoListCtrl', ['$scope', '$routeParams', '$
 	    });
 	}]);
 
-mediacenterControllers.controller('VideoDetailCtrl', ['$scope', '$sce', '$routeParams', '$http', 'Settings',
-      function($scope, $sce, $routeParams, $http, Settings) {
+mediacenterControllers.controller('VideoDetailCtrl', ['$scope', '$sce', '$routeParams', '$http', 'Settings', '$window',
+      function($scope, $sce, $routeParams, $http, Settings, $window) {
 
+  	  var videoType = function($window) {
+	      var userAgent = $window.navigator.userAgent;
+	      var browsers = {chrome: /chrome/i, safari: /safari/i, firefox: /firefox/i, ie: /internet explorer/i};
+	      var videoTypeSupported = {chrome: 'webm/', safari: 'mp4/', firefox: 'webm/', ie: 'mp4/'};
+	      for(var key in browsers) {
+		  if (browsers[key].test(userAgent)) {
+		      return videoTypeSupported[key];
+		  }
+	      };
+	      return '';
+	  }
+	
 	  $http.get(Settings.apiUri + 'video/' + $routeParams.videoId).success(function(data) {
 	      $scope.video = data.video;
-	      $scope.videoURL = $sce.trustAsResourceUrl(Settings.apiUri + "videoStream/" + data.video._id);
+	      $scope.videoURL = $sce.trustAsResourceUrl(Settings.apiUri + "videoStream/" + videoType($window) + data.video._id);
 	      if (!data.video)
 		  alert(data.message);
 	  });

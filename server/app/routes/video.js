@@ -188,9 +188,6 @@ module.exports = function(app, passport, isLoggedIn) {
 		    fs.unlink(global.PATH_API + videoURI + ".webm", function (err) {
 			    if (err) reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: DELETE /video/:idVideo unlink .webm", err); 
 			});
-		    fs.unlink(global.PATH_API + videoURI + ".ogg", function (err) {
-			    if (err) reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: DELETE /video/:idVideo unlink .ogg", err); 
-			});
 		    fs.unlink(global.PATH_API + constantes.PATH_FOLDER_IMAGE + video._id + ".png", function (err) {
 			    if (err) reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: DELETE /video/:idVideo unlink .png", err); 
 			});
@@ -225,6 +222,29 @@ module.exports = function(app, passport, isLoggedIn) {
 	    video.view += 1;
 	    video.save(function(err) {if (err) reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: /videoStream Video.save: add view", err);});
 	    res.sendfile(global.PATH_API + '/' + video.path, function (err) {
+		if (err)
+		    reporting.saveErrorAPI(constantes.TYPE_ERROR_STREAM, "app/routes/video.js: /videoStream sendFile ", err);
+	    });
+	});
+    });
+
+    app.get('/videoStream/:type/:idVideo', function(req, res) {
+	Video.findOne({_id: req.params.idVideo}, function(err, video) {
+	    if (err) {
+		console.log(err);
+		reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: /videoStream Video.findOne", err);
+		res.send(500);
+		return ;
+	    }
+	    if (video == null) {
+		console.log("video not found");
+		reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: /videoStream Video.findOne: video not found", err);
+		res.send(500);
+		return ;
+	    }
+	    video.view += 1;
+	    video.save(function(err) {if (err) reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/routes/video.js: /videoStream Video.save: add view", err);});
+	    res.sendfile(global.PATH_API + '/' + video.pathType[req.params.type], function (err) {
 		if (err)
 		    reporting.saveErrorAPI(constantes.TYPE_ERROR_STREAM, "app/routes/video.js: /videoStream sendFile ", err);
 	    });
@@ -284,7 +304,6 @@ module.exports = function(app, passport, isLoggedIn) {
 	    newVideo.path = videoURI + '.' + req.body.path.split('.').pop();
 	    newVideo.pathType.mp4 = videoURI + ".mp4";
 	    newVideo.pathType.webm = videoURI + ".webm";
-	    newVideo.pathType.ogg = videoURI + ".ogg";
 	    newVideo.idUser = req.user._id;
 	    newVideo.idChannel = req.body.idChannel;
 
@@ -320,17 +339,6 @@ module.exports = function(app, passport, isLoggedIn) {
 					    console.log('Processing finished successfully');
 					})
 				    .saveToFile(global.PATH_API + videoURI + '.webm');
-
-			    if (req.body.path.split('.').pop() !== 'ogg')
-				ffmpeg(req.body.path).format('ogg')
-				    .on('error', function(err) {
-					    console.log('Cannot process video: ' + err.message);
-					})
-				    .on('end', function() {
-					    console.log('Processing finished successfully');
-					})
-				    .saveToFile(global.PATH_API + videoURI + '.ogg');
-
 
 			    fs.ensureDir(global.PATH_API + constantes.PATH_FOLDER_IMAGE, function(err) {
 				    if (err) {

@@ -84,3 +84,4 @@ mediacenterApp.constant('Settings', {
 	    VideoSizeTooBig: "Error: Video Limit Size: 100MB"
 	}
 });
+
