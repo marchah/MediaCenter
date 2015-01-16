@@ -6,7 +6,11 @@ Install
 
 Install NodeJS
 
-https://github.com/joyent/node/wiki/installing-node.js-via-package-manager
+````
+curl -sL https://deb.nodesource.com/setup | sudo bash -
+sudo apt-get install -y nodejs
+````
+
 
 Install Bower
 
