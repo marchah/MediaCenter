@@ -15,7 +15,7 @@ sudo apt-get install -y nodejs
 Install Bower
 
 ````
-npm install -g bower
+sudo npm install -g bower
 ````
 
 Install MongoBD
