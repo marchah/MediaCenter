@@ -15,7 +15,8 @@ sudo apt-get install -y nodejs
 Install Bower
 
 ````
-sudo npm install -g bower
+sudo npm install -g bower express mongoose passport connect-flash morgan cookie-parser body-parser ...
+ou peut etre npm update
 ````
 
 Install MongoBD
