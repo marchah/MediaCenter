@@ -55,6 +55,8 @@ TODO
 ----
 
 * Bug: delete video -> delete /video/undefined
+* Bug: comment form -> when use isLoggin, comment text is undefined
+* Bug: when loggin HTML5 video tag take a long time to load
 * ~~multisource video support~~
 * ~~video image~~
 * ~~video duration~~
@@ -64,7 +66,7 @@ TODO
 * ~~private user profile: update video, delete video~~
 * ~~search video~~
 * style
-* Bonus: video comments
+* ~~Bonus: video comments~~
 * Bonus: video tags
 * Bonus: signin Facebook/twitter/google+
 
