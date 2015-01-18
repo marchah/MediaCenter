@@ -76,7 +76,6 @@ mediacenterControllers.controller('VideoEditCtrl', ['$scope', '$rootScope', '$ro
 	      $scope.message = "";
 
 	      var deleteVideo = $window.confirm('Are you sure to delete this video?');
-
 	      if (deleteVideo) {
 		  $http.delete(Settings.apiUri + 'video/' + $scope.video._id)
 		      .success(function(data){
