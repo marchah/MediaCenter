@@ -375,7 +375,6 @@ module.exports = function(app, passport, isLoggedIn) {
 
     app.post('/uploadVideo', multipartMiddleware, function(req, res) {
 	    var file = req.files.file;
-
 	    if (file.size > constantes.VIDEO_MAX_SIZE) {
 		res.status(400).send(constantes.ERROR_VIDEO_SIZE_TOO_BIG);
 		fs.unlink(file.path, function (err) {

@@ -281,7 +281,12 @@ mediacenterControllers.controller('VideoCreateCtrl', ['$scope', '$rootScope', '$
 		  $scope.video = {idChannel: data.channels[0]._id};
 	      });
 	  
-	  $scope.onFileSelect = function($files) {
+	  $scope.onFileSelect = function($file) {
+	      console.log('test onfileselect');
+	      $scope.uploadVideo($file.video.src);
+	  },
+	  $scope.uploadVideo = function($files) {
+	      console.log('test');
 	      $scope.processing = "";
 	      if ($files[0].size > Settings.Upload.MaxSize) {
 		  $scope.errorMessage = Settings.Message.VideoSizeTooBig;
@@ -304,7 +309,7 @@ mediacenterControllers.controller('VideoCreateCtrl', ['$scope', '$rootScope', '$
 		      $scope.errorMessage = data;
 	      });
 
-	  }
+	  },
 
 
 	    $scope.upload = function() {
