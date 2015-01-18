@@ -62,7 +62,7 @@ TODO
 * ~~public user profile~~
 * ~~upload video message success/erreur~~
 * ~~private user profile: update video, delete video~~
-* search video
+* ~~search video~~
 * style
 * Bonus: video comments
 * Bonus: video tags
