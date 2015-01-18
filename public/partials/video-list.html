@@ -5,7 +5,7 @@
     </div>
     <div class="col-md-10">
       <!--Body content-->
-
+      Search: <input ng-model="query" ng-change="filter()" focus-me="isFocused=true" >
       <ul>
         <li ng-repeat="video in videos">
           <a href="#/video/{{video._id}}"><img ng-src="{{videoImageUri}}{{video._id}}" />{{video.imageUrl}}</a>

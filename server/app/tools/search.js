@@ -8,7 +8,30 @@ var Channel    = require(global.PATH_API + '/app/models/channel');
 
 module.exports = {
 
-    searchVideo: function(idChannel, numPage, nbVideoPerPage, res) {
+    queryVideo: function(searchQuery, regex, numPage, nbVideoPerPage, cb) {
+	if (regex != null)
+	    Video.find(searchQuery, {title: true, description: true, duration: true, pathImage: true})
+		.or([{ 'title': { $regex: regex }}, { 'description': { $regex: regex }}])
+		.skip((numPage-1) * nbVideoPerPage)
+		.limit(nbVideoPerPage)
+		.exec(cb);
+	else
+	    Video.find(searchQuery, {title: true, description: true, duration: true, pathImage: true}, {skip: (numPage-1) * nbVideoPerPage, limit: nbVideoPerPage}, cb);
+    },
+
+    countVideo: function(searchQuery, regex, cb) {
+	if (regex != null)
+	    Video.count(searchQuery)
+		.or([{ 'title': { $regex: regex }}, { 'description': { $regex: regex }}])
+		.exec(cb);
+	else
+	    Video.count(searchQuery, cb);
+    },
+
+    searchVideo: function(idChannel, numPage, nbVideoPerPage, query, res) {
+	var regex = null;
+	if (typeof query.search !== 'undefined')
+	    regex = new RegExp(query.search, 'i');
 	var searchQuery = {};
 	if (mongoose.Types.ObjectId.isValid(idChannel))
 	    searchQuery.idChannel = idChannel;
@@ -18,8 +41,8 @@ module.exports = {
 	    || nbVideoPerPage > constantes.MAX_NB_VIDEO_PER_PAGE)
 	    nbVideoPerPage = constantes.DEFAULT_NB_VIDEO_PER_PAGE;*/
 nbVideoPerPage = 1;
-
-	Video.find(searchQuery, {title: true, description: true, duration: true, pathImage: true}, {skip: (numPage-1) * nbVideoPerPage, limit: nbVideoPerPage}, function(err, videos) {
+	var parent = this;
+	this.queryVideo(searchQuery, regex, numPage, nbVideoPerPage, function(err, videos) {
 	    if (err) {
 		reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/tools/search.js: searchVideo Video.find", err);
 		res.setHeader('Content-Type', 'application/json');
@@ -32,7 +55,7 @@ nbVideoPerPage = 1;
 		    videos[index].description = videos[index].description.substr(0, constantes.SIZE_MAX_DESCRIPTION_LIST_VIDEO) + '...';
 	    }
 
-	    Video.count(searchQuery, function(err, count) {
+	    parent.countVideo(searchQuery, regex, function (err, count) {
 		if (err) {
 		    reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/tools/search.js: searchVideo Video.count", err);
 		    res.setHeader('Content-Type', 'application/json');

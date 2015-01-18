@@ -21,27 +21,27 @@ var multipartMiddleware = multipart(/*{uploadDir: global.PATH_API + constantes.P
 module.exports = function(app, passport, isLoggedIn) {
 
     app.get('/videos', function(req, res) {
-	Search.searchVideo(null, 0, 0, res);
+	    Search.searchVideo(null, 0, 0, req.query, res);
     });
 
     app.get('/videos/:numPage(\\d+)', function(req, res) {
-	Search.searchVideo(null, req.params.numPage, 0, res);
+	    Search.searchVideo(null, req.params.numPage, 0, req.query, res);
     });
 
     app.get('/videos/:idChannel', function(req, res) {
-	Search.searchVideo(req.params.idChannel, 0, 0, res);
+	    Search.searchVideo(req.params.idChannel, 0, 0, req.query, res);
     });
 
     app.get('/videos/:numPage(\\d+)/:nbVideoPerPage(\\d+)', function(req, res) {
-	Search.searchVideo(null, req.params.numPage, req.params.nbVideoPerPage, res);
+	    Search.searchVideo(null, req.params.numPage, req.params.nbVideoPerPage, req.query, res);
     });
 
     app.get('/videos/:idChannel/:numPage(\\d+)', function(req, res) {
-	Search.searchVideo(req.params.idChannel, req.params.numPage, 0, res);
+	    Search.searchVideo(req.params.idChannel, req.params.numPage, 0, req.query, res);
     });
 
     app.get('/videos/:idChannel/:numPage(\\d+)/:nbVideoPerPage(\\d+)', function(req, res) {
-	Search.searchVideo(req.params.idChannel, req.params.numPage, req.params.nbVideoPerPage, res);
+	    Search.searchVideo(req.params.idChannel, req.params.numPage, req.params.nbVideoPerPage, req.query, res);
     });
 
     app.get('/video/:idVideo', function(req, res) {

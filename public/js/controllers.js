@@ -4,26 +4,35 @@
 
 var mediacenterControllers = angular.module('mediacenterControllers', []);
 
-mediacenterControllers.controller('VideoListCtrl', ['$scope', '$routeParams', '$http', 'Settings',
-	function ($scope, $routeParams, $http, Settings) {
-	    var page = parseInt($routeParams.page);
-	    if (isNaN(page) || page < 1)
-		page = 1;
-	    var idChannel = "";
-	    if (typeof $routeParams.idChannel != 'undefined')
-		var idChannel = $routeParams.idChannel + "/";
-	    $http.get(Settings.apiUri + 'videos/' + idChannel + page).success(function(data) {
-		$scope.videos = data.videos;
-		if (typeof data.videos != 'undefined' && data.count != 0 && data.videos.length != 0)
-		    $scope.nbPages = Math.ceil(data.count / data.videos.length);
-		else
-		    $scope.nbPages = 0;
-		$scope.videoImageUri = Settings.apiUri + "video/picture/";
-		$scope.idChannel = idChannel;
-		$scope.getNumber = function(num) {
-		    return new Array(num);
-		}
-	    });
+mediacenterControllers.controller('VideoListCtrl', ['$scope', '$rootScope', '$routeParams', '$http', '$location', 'Settings',
+	 function ($scope, $rootScope, $routeParams, $http, $location, Settings) {
+	    $scope.filter = function() {
+		$rootScope.query = $scope.query;
+		$location.url('/videos/' + (typeof $routeParams.idChannel != 'undefined' ? $routeParams.idChannel + '/' : '') + '1');
+		$scope.query = $rootScope.query;
+		$scope.search(1);
+	    };
+	    $scope.search = function(currentPage) {
+		var page = currentPage;
+		if (isNaN(page) || page < 1)
+		    page = 1;
+		var idChannel = "";
+		if (typeof $routeParams.idChannel != 'undefined')
+		    var idChannel = $routeParams.idChannel + "/";
+		$http.get(Settings.apiUri + 'videos/' + idChannel + page, {params: {search: $scope.query}}).success(function(data) {
+			$scope.videos = data.videos;
+			if (typeof data.videos != 'undefined' && data.count != 0 && data.videos.length != 0)
+			    $scope.nbPages = Math.ceil(data.count / data.videos.length);
+			else
+			    $scope.nbPages = 0;
+			$scope.videoImageUri = Settings.apiUri + "video/picture/";
+			$scope.idChannel = idChannel;
+			$scope.getNumber = function(num) {
+			    return new Array(num);
+			}
+		    });
+	    };
+	    $scope.search(parseInt($routeParams.page));
 	}]);
 
 mediacenterControllers.controller('VideoDetailCtrl', ['$scope', '$sce', '$routeParams', '$http', 'Settings', '$window',
