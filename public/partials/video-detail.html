@@ -26,3 +26,20 @@
     <dd>{{video.uploadDate}}</dd>
   </li>
 </ul>
+<div ng-repeat="comment in comments">
+  <a href="#/user/{{comment.idUser}}">{{comment.user}}</a>
+  <p>{{comment.date}}</p>
+  <p>{{comment.text}}</p>
+</div>
+<p>{{errorComments}}</p>
+<div>
+  <form ng-submit="submitComment()">
+    <p>
+      <input type="text" placeholder="Comment" name="comment" ng-model="comment" ng-required="true" />
+    </p>
+    <p>
+      <button type="submit">Add</button>
+    </p>
+    <p>{{errorMessage}}{{message}}</p>
+  </form>
+<div>

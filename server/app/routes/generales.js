@@ -10,6 +10,7 @@ module.exports = function(app, passport) {
     require(global.PATH_API + '/app/routes/video.js')(app, passport, isLoggedIn);
     require(global.PATH_API + '/app/routes/channel.js')(app, passport, isLoggedIn);
     require(global.PATH_API + '/app/routes/user.js')(app, passport, isLoggedIn);
+    require(global.PATH_API + '/app/routes/comment.js')(app, passport, isLoggedIn);
     require(global.PATH_API + '/app/routes/authenticate.js')(app, passport, isLoggedIn);
 
     app.get('*', function(req, res) {

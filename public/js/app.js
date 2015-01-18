@@ -80,6 +80,7 @@ mediacenterApp.constant('Settings', {
 	    TypeSupported: "video/mp4, video/webm, video/avi"
 	},
 	Message: {
+	    AuthentificationRequired: "You must be authenticated",
 	    NoVideoUploadSelected: "Please select a video to upload",
 	    VideoSizeTooBig: "Error: Video Limit Size: 100MB"
 	}

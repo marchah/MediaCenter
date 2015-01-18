@@ -52,6 +52,8 @@ define("ERROR_UNKNOW_CHANNEL", "Unknow channel.");
 //define("ERROR_UNKNOW_USER", "Unknow user.");
 //define("DEFAULT_VALUE_CHANNEL", "Unknow");
 
+// Comment
+define("ERROR_NO_COMMENT_TEXT", "Error: No comment text.");
 
 // Upload
 

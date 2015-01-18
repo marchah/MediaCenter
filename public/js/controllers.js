@@ -56,6 +56,37 @@ mediacenterControllers.controller('VideoDetailCtrl', ['$scope', '$sce', '$routeP
 	      if (!data.video)
 		  alert(data.message);
 	  });
+	  $http.get(Settings.apiUri + 'comments/' + $routeParams.videoId)
+	      .success(function(data) {
+		      $scope.comments = data.comments;
+		  })
+	      .error(function(data){
+		      if (typeof data.message !== 'undefined')
+			  $scope.errorComments = data.message;
+		      else
+			  $scope.errorComments = data;
+		  });
+
+	    $scope.submitComment = function() {
+		$scope.errorMessage = "";
+		if (typeof $scope.user === 'undefined') {
+		    $scope.errorMessage = Settings.Message.AuthentificationRequired;
+		    return;
+		}
+		console.log($scope.comment);
+		$scope.idVideo = $routeParams.videoId;
+		$http.post(Settings.apiUri + 'comment', {text: $scope.comment, idVideo: $scope.idVideo})
+		.success(function(data){
+			$scope.comments.push(data.comment);
+		    })
+		.error(function(data){
+			if (typeof data.message !== 'undefined')
+			    $scope.errorMessage = data.message;
+			else
+			    $scope.errorMessage = data;
+		    });
+	    };
+
       }]);
 
 
