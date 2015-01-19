@@ -55,7 +55,7 @@ TODO
 ----
 
 * Bug: delete video -> delete /video/undefined
-* Bug: comment form -> when use isLoggin, comment text is undefined
+* ~~Bug: comment form -> when use isLoggin, comment text is undefined~~
 * Bug: when loggin HTML5 video tag take a long time to load
 * ~~multisource video support~~
 * ~~video image~~
