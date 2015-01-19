@@ -32,7 +32,7 @@
   <p>{{comment.text}}</p>
 </div>
 <p>{{errorComments}}</p>
-<div>
+<div ng-show="isLoggin()">
   <form ng-submit="submitComment()">
     <p>
       <input type="text" placeholder="Comment" name="comment" ng-model="comment" ng-required="true" />

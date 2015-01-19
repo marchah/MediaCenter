@@ -49,7 +49,12 @@ mediacenterControllers.controller('VideoDetailCtrl', ['$scope', '$sce', '$routeP
 	      };
 	      return '';
 	  }
-	
+	  $scope.isLoggin = function() {
+	      if (typeof $scope.user !== 'undefined')
+		  return true;
+	      return false;
+	  }
+
 	  $http.get(Settings.apiUri + 'video/' + $routeParams.videoId).success(function(data) {
 	      $scope.video = data.video;
 	      $scope.videoURL = $sce.trustAsResourceUrl(Settings.apiUri + "videoStream/" + videoType($window) + data.video._id);
@@ -73,11 +78,11 @@ mediacenterControllers.controller('VideoDetailCtrl', ['$scope', '$sce', '$routeP
 		    $scope.errorMessage = Settings.Message.AuthentificationRequired;
 		    return;
 		}
-		console.log($scope.comment);
 		$scope.idVideo = $routeParams.videoId;
 		$http.post(Settings.apiUri + 'comment', {text: $scope.comment, idVideo: $scope.idVideo})
 		.success(function(data){
 			$scope.comments.push(data.comment);
+			$scope.comment = "";
 		    })
 		.error(function(data){
 			if (typeof data.message !== 'undefined')
