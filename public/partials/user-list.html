@@ -1,12 +1,12 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
+    <div class="col-xs-2">
       <!--Sidebar content-->
     </div>
-    <div class="col-md-10">
+    <div class="col-xs-10">
       <!--Body content-->
 
-      <ul>
+      <ul class="list-unstyled user-list">
         <li ng-repeat="user in users">
           <a href="#/user/{{user._id}}">{{user.name}}</a>
         </li>
