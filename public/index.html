@@ -13,38 +13,28 @@
   <script src="js/controllers.js"></script>
 </head>
 <body>
-  <div>
-    <ul>
-      <li>
-	<a href="#/news">News</a>
-      </li>
-      <li>
-	<a href="#/videos/1">List Videos</a>
-      </li>
-      <li>
-	<a href="#/channels">List Channels</a>
-      </li>
-      <li>
-	<a href="#/users">List Users</a>
-      </li>
-      <span ng-controller="LoginCtrl">
-	<li ng-if="isLoggin()">
-	  <a href="#/upload">Upload</a>
-	</li>
-      </span>
-    </ul>
-  </div>
+  <nav id="navigation-menu" class="navbar navbar-fxed-top navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header"></div>
+        <a class="navbar-brand" href="#/news">
+          <img alt="Brand" src="img/logo.png">
+        </a>
+        <div class="collapse navbar-collapse">
+          <ul ng-controller="LoginCtrl" class="nav navbar-nav">
+            <li class="active navbar-left"><a href="#/news">News</a></li>
+            <li class="navbar-left"><a href="#/videos/1">Videos</a></li>
+            <li class="navbar-left"><a href="#/channels">Channels</a></li>
+            <li class="navbar-left"><a href="#/users">Users</a></li>
+            <li ng-if="isLoggin()" class="navbar-left"><a href="#/upload">Upload</a></li>
+            <li ng-if="isLoggin()" class="navbar-right"><a href="#/logout">Log out</a></li>
+            <li ng-if="isLoggin()" class="navbar-right"><a href="#/profile">{{user.name}}</a></li>
+            <li ng-if="!isLoggin()" class="navbar-right"><a href="#/signup">Sign up</a></li>
+            <li ng-if="!isLoggin()" class="navbar-right"><a href="#/login">Login</a></li>
+          </ul>
+        </div>
+    </div>
+  </nav>
   <div ng-view></div>
-  <div ng-controller="LoginCtrl">
-    <p ng-if="isLoggin()">
-      <a href="#/profile">{{user.name}}</a>
-      <a href="#/logout">LogOut</a>
-    </p>
-    <p ng-if="!isLoggin()">
-      <a href="#/login">Login</a>
-      <a href="#/signup">Sign Up</a>
-    </p>
-  </div>
   <span data-ng-controller="SessionCtrl" data-ng-init="init()"/>
 </body>
 </html>
