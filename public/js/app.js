@@ -77,6 +77,7 @@ mediacenterApp.constant('Settings', {
 	apiUri: '/',
 	Upload: {
 	    MaxSize: 100 * 1024 * 1024,
+	    TagDelimiter: ' ',
 	    TypeSupported: "video/mp4, video/webm, video/avi"
 	},
 	Message: {

@@ -27,6 +27,7 @@ define("ERROR_API_DB", "Error: server internal error.");
 define("ERROR_API", "Error: server internal error.");
 define("ERROR_NOT_LOGGEDIN", "Error: you're not logged in.");
 define("REQUEST_API_SUCCESS", "Request Success.");
+define("ERROR_INVALID_TAGS", "Error: invalid tags.");
 
 // Error API Type
 define("TYPE_ERROR_BDD", "1");
@@ -49,6 +50,7 @@ define("AUTHENTIFICATION_SUCCESS", "Connection success.");
 
 define("ERROR_UNKNOW_VIDEO", "Unknow video.");
 define("ERROR_UNKNOW_CHANNEL", "Unknow channel.");
+define("LIMIT_NB_RELATED_VIDEO", 5);
 //define("ERROR_UNKNOW_USER", "Unknow user.");
 //define("DEFAULT_VALUE_CHANNEL", "Unknow");
 

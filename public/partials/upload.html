@@ -25,11 +25,16 @@
               </select>
             </p>
             <p>
-              <label>Video*</label>
-              <input type="file" ng-Change="onFileSelect(this)" ng-file-select="onFileSelect(this)" ng-model="video.src"  ng-required="true" accept="{{VideoTypeSupported}}" />
+              <label>Video*</label><!-- ng-Change="onFileSelect(this)"-->
+              <input type="file" ng-file-select="onFileSelect(this)" ng-model="video.src"  ng-required="true" accept="{{VideoTypeSupported}}" />
               <p>Supported format: .mp4, .webm and .avi</p>
               <p>{{processing}}</p>
             </p>
+	    <p>
+	      <label>Tags</label>
+	      <input type="text" ng-model="video.tags"/>
+	      <p>Separate tags by space</p>
+	    </p>
             <p>
               <button type="submit">Upload</button>
             </p>

@@ -104,6 +104,26 @@ module.exports = function(app, passport, isLoggedIn) {
 		    video.user = user.name;
 		    callback(null, video);
 		});
+	    },
+	    function(video, callback) {
+		// TODO: remove when database reinialised
+		if (typeof video.tags === 'undefined') {
+		    callback(null, video);
+		    return ;
+		}
+		var query = '';
+		for (var i = 0; i != video.tags.length; i++) {
+		    if (query.length > 0)
+			query += ',';
+		    var regex = new RegExp(video.tags[i], 'i');
+		    query += {'title': {$regex: regex}};
+		}
+		
+
+		Video.find({}).or([query]).limit(constantes.LIMIT_NB_RELATED_VIDEO).exec(function(err, videos) {
+			video.related = videos;
+			callback(null, video);
+		    });
 	    }
 	], function (err, video) {
 	    if (!err) {
@@ -301,6 +321,16 @@ module.exports = function(app, passport, isLoggedIn) {
 		newVideo.description = "";
 	    else
 		newVideo.description = req.body.description;
+
+	    if (typeof req.body.tags === 'undefined')
+		newVideo.tags = [];
+	    else if (req.body.tags.constructor === Array) {
+		newVideo.tags = req.body.tags;
+	    }
+	    else {
+		res.status(400).send({message: constantes.ERROR_INVALID_TAGS});
+		return ;
+	    }
 	    newVideo.path = videoURI + '.' + req.body.path.split('.').pop();
 	    newVideo.pathType.mp4 = videoURI + ".mp4";
 	    newVideo.pathType.webm = videoURI + ".webm";
@@ -390,4 +420,5 @@ module.exports = function(app, passport, isLoggedIn) {
 	    else
 		res.send({path: file.path});
 	});
+
 };

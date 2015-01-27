@@ -60,6 +60,7 @@ mediacenterControllers.controller('VideoDetailCtrl', ['$scope', '$sce', '$routeP
 	      $scope.videoURL = $sce.trustAsResourceUrl(Settings.apiUri + "videoStream/" + videoType($window) + data.video._id);
 	      if (!data.video)
 		  alert(data.message);
+	      $scope.videoImageUri = Settings.apiUri + "video/picture/";
 	  });
 	  $http.get(Settings.apiUri + 'comments/' + $routeParams.videoId)
 	      .success(function(data) {
@@ -369,6 +370,7 @@ mediacenterControllers.controller('VideoCreateCtrl', ['$scope', '$rootScope', '$
 		    title: $scope.video.title,
 		    description: $scope.video.description,
 		    idChannel: $scope.video.idChannel,
+		    tags: $scope.video.tags.split(Settings.Upload.TagDelimiter),
 		    path: $scope.path
 		})
 		.success(function(data){

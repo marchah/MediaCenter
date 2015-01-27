@@ -13,6 +13,7 @@ var videoSchema = mongoose.Schema({
     },
     pathImage	: {type: String},
     type	: {type: String},
+    tags        : [String],
     view	: {type: Number, default: 0},
     idUser	: {type : mongoose.Schema.Types.ObjectId},
     idChannel	: {type : mongoose.Schema.Types.ObjectId},

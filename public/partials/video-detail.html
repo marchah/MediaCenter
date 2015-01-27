@@ -26,6 +26,11 @@
     <dd>{{video.uploadDate}}</dd>
   </li>
 </ul>
+<div ng-repeat="relatedVideo in video.related">
+   <a href="#/video/{{relatedVideo._id}}"><img ng-src="{{videoImageUri}}{{relatedVideo._id}}" /></a>
+   <a href="#/video/{{relatedVideo._id}}">{{relatedVideo.title}}</a>
+</div>
+
 <div ng-repeat="comment in comments">
   <a href="#/user/{{comment.idUser}}">{{comment.user}}</a>
   <p>{{comment.date}}</p>
