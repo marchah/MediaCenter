@@ -61,6 +61,9 @@ mediacenterControllers.controller('VideoDetailCtrl', ['$scope', '$sce', '$routeP
 	      if (!data.video)
 		  alert(data.message);
 	      $scope.videoImageUri = Settings.apiUri + "video/picture/";
+	      $http.post(Settings.apiUri + 'relatedVideo/' + data.video._id, {tags: data.video.tags}).success(function(data) {
+		      $scope.video.related = data.videos;
+		  });
 	  });
 	  $http.get(Settings.apiUri + 'comments/' + $routeParams.videoId)
 	      .success(function(data) {
@@ -109,6 +112,12 @@ mediacenterControllers.controller('VideoEditCtrl', ['$scope', '$rootScope', '$ro
 		      $location.url('/news');
 		  $scope.video = data.video;
 		  $scope.videoImageUri = Settings.apiUri + "video/picture/";
+		  $scope.video.tagsString = '';
+		  for (var i = 0; i != data.video.tags.length; i++) {
+		      if (i > 0)
+			  $scope.video.tagsString += Settings.Upload.TagDelimiter;
+		      $scope.video.tagsString += data.video.tags[i];
+		  }
 		  if (!data.video)
 		      alert(data.message);
 	  });
@@ -140,9 +149,10 @@ mediacenterControllers.controller('VideoEditCtrl', ['$scope', '$rootScope', '$ro
 	      $scope.message = "";
 	      
 	      $http.put(Settings.apiUri + 'video/' + $scope.video._id, {
-		    title: $scope.video.title,
-		    description: $scope.video.description,
-		    idChannel: $scope.video.idChannel
+		  title: $scope.video.title,
+		  description: $scope.video.description,
+		  idChannel: $scope.video.idChannel,
+		  tags: $scope.video.tagsString.split(Settings.Upload.TagDelimiter)
 		})
 		.success(function(data){
 			$scope.message = data.message;

@@ -104,26 +104,6 @@ module.exports = function(app, passport, isLoggedIn) {
 		    video.user = user.name;
 		    callback(null, video);
 		});
-	    },
-	    function(video, callback) {
-		// TODO: remove when database reinialised
-		if (typeof video.tags === 'undefined') {
-		    callback(null, video);
-		    return ;
-		}
-		var query = '';
-		for (var i = 0; i != video.tags.length; i++) {
-		    if (query.length > 0)
-			query += ',';
-		    var regex = new RegExp(video.tags[i], 'i');
-		    query += {'title': {$regex: regex}};
-		}
-		
-
-		Video.find({}).or([query]).limit(constantes.LIMIT_NB_RELATED_VIDEO).exec(function(err, videos) {
-			video.related = videos;
-			callback(null, video);
-		    });
 	    }
 	], function (err, video) {
 	    if (!err) {
@@ -170,6 +150,16 @@ module.exports = function(app, passport, isLoggedIn) {
 			video.description = "";
 		    else
 			video.description = req.body.description;
+		    if (typeof req.body.tags === 'undefined')
+			video.tags = [];
+		    else if (req.body.tags.constructor === Array) {
+			video.tags = req.body.tags;
+		    }
+		    else {
+			res.status(400).send({message: constantes.ERROR_INVALID_TAGS});
+			return ;
+		    }
+
 		    video.idChannel = req.body.idChannel;
 		    video.save(function(err) {
 			    if (err) {
@@ -270,6 +260,31 @@ module.exports = function(app, passport, isLoggedIn) {
 	    });
 	});
     });
+
+    app.post('/relatedVideo/:idVideo', function(req, res) {
+	    if (typeof req.body.tags === 'undefined') {
+		res.send({videos: []});
+		return ;
+	    }
+	    console.log(req.body.tags);
+	    var query = '';
+	    var test = '';
+	    for (var i = 0; i != req.body.tags.length; i++) {
+		if (query.length > 0)
+		    query += ',';
+		var regex = new RegExp(req.body.tags[i], 'i');
+		query += {'tags': req.body.tags[i]};
+		console.log(req.body.tags[i].toString());
+		test += {'tags': JSON.stringify(req.body.tags[i])};
+	    }
+	    console.log(JSON.stringify(test));
+	    console.log(JSON.stringify({'tags': 'tag2'}));
+	    var tmp = JSON.stringify({'tags': 'tag2'});
+	    console.log(JSON.stringify(test) === JSON.stringify({'tags': 'tag2'}));
+	    Video.find({_id: {'$ne': req.params.idVideo}, '$or': [tmp]})/*.or([test*//*query*//*JSON.stringify({'tags': 'tag3'})*//*, {'tags': 'tag1'}"*//*])*/.limit(constantes.LIMIT_NB_RELATED_VIDEO).exec(function(err, videos) {
+		    res.send({videos: videos});
+		});
+	});
 
     app.get('/news', function(req, res) {
 	    Video.find({}, {title: true, description: true, duration: true, pathImage: true}, {sort: {date: 'desc'}, limit: constantes.LIMIT_NB_NEWS}, function(err, videos) {
