@@ -260,31 +260,18 @@ module.exports = function(app, passport, isLoggedIn) {
 	    });
 	});
     });
-// http://stackoverflow.com/questions/15532238/how-to-execute-a-dynamic-number-of-criteria-in-mongoose-find
+
     app.post('/relatedVideo/:idVideo', function(req, res) {
 	    if (typeof req.body.tags === 'undefined') {
 		res.send({videos: []});
 		return ;
 	    }
-	    console.log(req.body.tags);
-	    var query = '';
-	    var test = '';
-	    var queryNew = {_id: {'$ne': req.params.idVideo}, $or:[]};
+	    var query = {_id: {'$ne': req.params.idVideo}, $or:[]};
 	    for (var i = 0; i != req.body.tags.length; i++) {
-		if (query.length > 0)
-		    query += ',';
 		var regex = new RegExp(req.body.tags[i], 'i');
-		query += {'tags': req.body.tags[i]};
-		console.log(req.body.tags[i].toString());
-		test += {'tags': JSON.stringify(req.body.tags[i])};
-		queryNew.$or.push({'tags' : req.body.tags[i]});
+		query.$or.push({'tags' : regex});
 	    }
-	    console.log(JSON.stringify(test));
-	    console.log(JSON.stringify({'tags': 'tag2'}));
-	    var tmp = JSON.stringify({'tags': 'tag2'});
-	    console.log(JSON.stringify(test) === JSON.stringify({'tags': 'tag2'}));
-	Video.find(newQuery).limit(constantes.LIMIT_NB_RELATED_VIDEO).exec(function(err, videos) {
-//	    Video.find({_id: {'$ne': req.params.idVideo}, '$or': [tmp]})/*.or([test*//*query*//*JSON.stringify({'tags': 'tag3'})*//*, {'tags': 'tag1'}"*//*])*/.limit(constantes.LIMIT_NB_RELATED_VIDEO).exec(function(err, videos) {
+	    Video.find(query).limit(constantes.LIMIT_NB_RELATED_VIDEO).exec(function(err, videos) {
 		    res.send({videos: videos});
 		});
 	});
