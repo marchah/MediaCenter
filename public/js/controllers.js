@@ -209,15 +209,26 @@ mediacenterControllers.controller('LoginCtrl', ['$scope', '$rootScope', '$http',
 		    return true;
 		return false;
 	    };
+	    $scope.loginFacebook = function() {
+		$http.get(Settings.apiUri + 'auth/facebook')
+		.success(function(user){
+			$rootScope.user = user;
+			$location.url('/news');
+		    })
+		.error(function(data, status, headers, config){
+			$scope.errorMessage = "Authentication failed: " + data.message;
+		    });
+	    };
+	    
 	    $scope.login = function() {
 
 		$http.post(Settings.apiUri + 'login', {
 		    login: $scope.user.username,
 		    password: $scope.user.password,
 		})
-		    .success(function(user){
-			    $rootScope.user = user;
-			    $location.url('/news');
+		.success(function(user){
+			$rootScope.user = user;
+			$location.url('/news');
 		    })
 		.error(function(data, status, headers, config){
 			$scope.errorMessage = "Authentication failed: " + data.message;
