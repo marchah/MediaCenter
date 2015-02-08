@@ -1,5 +1,6 @@
 // load all the things we need
 var LocalStrategy    = require('passport-local').Strategy;
+var FacebookStrategy = require('passport-facebook').Strategy;
 var Validator        = require('validator');
 
 // load up the user model
@@ -31,64 +32,46 @@ module.exports = function(passport) {
         });
     });
 
-
-/*    passport.use('local', new LocalStrategy({
-	usernameField : 'login',
-        passwordField : 'password',
-        passReqToCallback : true // allows us to pass in the req from our route
-    },
-	    function(req, login, password, done) {
-		process.nextTick(function() {
-		    User.findOne({$or:[{'local.email': login.toLowerCase()}, {'local.login': login.toLowerCase()}]}, function(err, user) {
-			if (err) {
-			    reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "config/passport.js: local-login User.findOne ", err);
-			    return done(err);
-			}
-			// if no user is found, return the message
-			if (!user)
-			    return done(null, false, {isAuthenticated: false, message: constantes.ERROR_UNKNOW_USER});
-			if (!user.validPassword(password))
-			    return done(null, false, {isAuthenticated: false, message: constantes.ERROR_WRONG_PASSWORD});
-			// all is well, return user
-			else
-			    return done(null, user, {isAuthenticated: true, message: constantes.AUTHENTIFICATION_SUCCESS}); 
-		    });
-		});
-	 }
-	));
-*/
     // =========================================================================
     // LOCAL LOGIN =============================================================
     // =========================================================================
-/*    passport.use('local-login', new LocalStrategy({
-        usernameField : 'login',
-        passwordField : 'password',
-        passReqToCallback : true // allows us to pass in the req from our route
-    },
-      function(req, login, password, done) {
-          process.nextTick(function() {
-	      console.log('trying logging');
-              User.findOne({$or:[{'local.email': login.toLowerCase()}, {'local.login': login.toLowerCase()}]}, function(err, user) {
-                  if (err) {
-		      reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "config/passport.js: local-login User.findOne ", err);
-                      return done(err);
-		  }
-                  // if no user is found, return the message
-                  if (!user)
-		      return done(null, false, req.flash('loginMessage', constantes.ERROR_UNKNOW_USER));
-                  if (!user.validPassword(password)) {
-		      console.log('wrong password');
-                      return done(null, false, req.flash('loginMessage', constantes.ERROR_WRONG_PASSWORD));
-		  }
-                  // all is well, return user
-                  else
-                      return done(null, user);
-              });
-	  });
+
+
+    // =========================================================================
+    // FACEBOOK ================================================================
+    // =========================================================================
+
+    passport.use(new FacebookStrategy({
+		clientID        : configAuth.facebookAuth.clientID,
+		clientSecret    : configAuth.facebookAuth.clientSecret,
+		callbackURL     : configAuth.facebookAuth.callbackURL
+	    },
+    function(token, refreshToken, profile, done) {
+	process.nextTick(function() {
+		User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
+			console.log('etst');
+			if (err)
+			    return done(err);
+			if (user) {
+			    console.log('exist');
+			    return done(null, user);
+			} else {
+			    console.log('new');
+			    var newUser            = new User();
+			    newUser.name           = profile.name.givenName + ' ' + profile.name.familyName;
+			    newUser.facebook.id    = profile.id;
+			    newUser.facebook.token = token;
+			    newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName;
+			    newUser.facebook.email = profile.emails[0].value;
+			    newUser.save(function(err) {
+				    if (err)
+					throw err;
+				    return done(null, newUser);
+				});
+			}
+		    });
+	    });
     }));
-
-*/
-
 
 };
 

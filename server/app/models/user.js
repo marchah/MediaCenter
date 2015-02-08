@@ -12,6 +12,24 @@ var userSchema = mongoose.Schema({
 	password     : {type: String},
 	hashConformationEmail: {type: String},
     },
+    facebook         : {
+	id           : {type: String},
+	token        : {type: String},
+	email        : {type: String},
+	name         : {type: String},
+    },
+    twitter          : {
+	id           : {type: String},
+	token        : {type: String},
+	displayName  : {type: String},
+	username     : {type: String},
+    },
+    google           : {
+	id           : {type: String},
+	token        : {type: String},
+	email        : {type: String},
+	name         : {type: String},
+    },
     inscriptionDate: {type: Date, default: Date.now}
 });
 
