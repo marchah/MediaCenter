@@ -11,34 +11,34 @@
             </div>
             <div class="panel-body">
               <form ng-submit="upload()">
-            <p>
-              <label>Title*</label>
-              <input type="text" placeholder="Title" ng-model="video.title" ng-required="true" />
-            </p>
-            <p>
-              <label>Description</label>
-              <input type="text" placeholder="Description" ng-model="video.description" />
-            </p>
-            <p>
-              <label>Channel*</label>
-              <select ng-options="channel._id as channel.name for channel in channels" ng-model="video.idChannel">
+            <div class="form-group col-xs-8">
+              <label for="title-input">Title *</label>
+              <input type="text" class="form-control" placeholder="Title" id="title-input" ng-model="video.title" ng-required="true" />
+            </div>
+            <div class="form-group col-xs-8">
+              <label for="desc-input">Description</label>
+              <textarea class="form-control" id="desc-input" placeholder="Description" ng-model="video.description"></textarea>
+            </div>
+            <div class="form-group col-xs-8">
+              <label for="channel-input">Channel *</label>
+              <select class="form-control" id="channel-input" ng-options="channel._id as channel.name for channel in channels" ng-model="video.idChannel">
               </select>
-            </p>
-            <p>
-              <label>Video*</label><!-- ng-Change="onFileSelect(this)"-->
-              <input type="file" ng-file-select="onFileSelect(this)" ng-model="video.src"  ng-required="true" accept="{{VideoTypeSupported}}" />
-              <p>Supported format: .mp4, .webm and .avi</p>
+            </div>
+            <div class="form-group col-xs-8">
+              <label for="video-input">Video *</label>
+              <input id="video-input" type="file" ng-Change="onFileSelect(this)" ng-file-select="onFileSelect(this)" ng-model="video.src"  ng-required="true" accept="{{VideoTypeSupported}}" />
+              <span class="help-block">Supported format: .mp4, .webm and .avi</span>
               <p>{{processing}}</p>
+            </div>
+      	    <div class="form-group col-xs-8">
+      	      <label for="tags-input">Tags</label>
+      	      <input id="tags-input" class="form-control" type="text" ng-model="video.tags"/>
+      	      <span class="help-block">Separate tags by space</span>
+      	    </div>
+            <p class="col-xs-8">
+              <button class="btn btn-info" type="submit">Upload</button>
             </p>
-	    <p>
-	      <label>Tags</label>
-	      <input type="text" ng-model="video.tags"/>
-	      <p>Separate tags by space</p>
-	    </p>
-            <p>
-              <button type="submit">Upload</button>
-            </p>
-            <p>{{errorMessage}}</p>
+            <p class="col-xs-8">{{errorMessage}}</p>
               </form>
             </div>
         </div>

@@ -8,7 +8,7 @@ var Video    = require('./app/models/video');
 
 var user = function() {
     console.log("****** User Begin ******");
-    
+
     var newUser            = new User();
     newUser.name	   = 'User Test 1';
     newUser.local.login    = 'user1';
