@@ -27,9 +27,18 @@ mediacenterControllers.controller('VideoListCtrl', ['$scope', '$rootScope', '$ro
 			    $scope.nbPages = 0;
 			$scope.videoImageUri = Settings.apiUri + "video/picture/";
 			$scope.idChannel = idChannel;
-			$scope.getNumber = function(num) {
+			// $http.get(Settings.apiUri + 'channels').success(function(data) {
+			// 	var channelId = (typeof $routeParams.idChannel !== 'undefined') ? (parseInt($routeParams.idChannel) - 1) : 0;
+			// 	var channelName = data.channels[channelId].name;
+			// 	console.log($routeParams.idChannel);
+			// 	console.log(channelId, channelName);
+			// 	$scope.channelName = channelName;
+				$scope.getNumber = function(num) {
 			    return new Array(num);
 			}
+			// });
+
+
 		    });
 	    };
 	    $scope.search(parseInt($routeParams.page));
@@ -50,13 +59,12 @@ mediacenterControllers.controller('VideoDetailCtrl', ['$scope', '$sce', '$routeP
 	      return '';
 	  }
 	  $scope.isLoggin = function() {
-	      if (typeof $scope.user !== 'undefined')
-		  return true;
-	      return false;
+	      return (typeof $scope.user !== 'undefined');
 	  }
 
 	  $http.get(Settings.apiUri + 'video/' + $routeParams.videoId).success(function(data) {
 	      $scope.video = data.video;
+	      $scope.video.duration = Math.trunc($scope.video.duration / 60) + ':' + $scope.video.duration % 60;
 	      $scope.videoURL = $sce.trustAsResourceUrl(Settings.apiUri + "videoStream/" + videoType($window) + data.video._id);
 	      if (!data.video)
 		  alert(data.message);
@@ -147,7 +155,7 @@ mediacenterControllers.controller('VideoEditCtrl', ['$scope', '$rootScope', '$ro
 
 	  $scope.update = function() {
 	      $scope.message = "";
-	      
+
 	      $http.put(Settings.apiUri + 'video/' + $scope.video._id, {
 		  title: $scope.video.title,
 		  description: $scope.video.description,
@@ -219,7 +227,7 @@ mediacenterControllers.controller('LoginCtrl', ['$scope', '$rootScope', '$http',
 			$scope.errorMessage = "Authentication failed: " + data.message;
 		    });
 	    };
-	    
+
 	    $scope.login = function() {
 
 		$http.post(Settings.apiUri + 'login', {
@@ -340,14 +348,14 @@ mediacenterControllers.controller('VideoCreateCtrl', ['$scope', '$rootScope', '$
 
 	     if (typeof $scope.user === 'undefined')
 		 $location.url('/news');
-					  
+
 	  $scope.VideoTypeSupported = Settings.Upload.TypeSupported;
-	  
+
 	  $http.get(Settings.apiUri + 'channels').success(function(data) {
 		  $scope.channels = data.channels;
 		  $scope.video = {idChannel: data.channels[0]._id};
 	      });
-	  
+
 	  $scope.onFileSelect = function($file) {
 	      console.log('test onfileselect');
 	      $scope.uploadVideo($file.video.src);
@@ -381,7 +389,7 @@ mediacenterControllers.controller('VideoCreateCtrl', ['$scope', '$rootScope', '$
 
 	    $scope.upload = function() {
 		$scope.errorMessage = "";
-		
+
 		if (typeof $scope.path === "undefined" || $scope.path.length <= 0) {
 		    $scope.errorMessage = Settings.Message.NoVideoUploadSelected;
 		    return ;
