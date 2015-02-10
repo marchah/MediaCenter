@@ -5,47 +5,57 @@
     </div>
     <div class="col-md-10">
       <!--Body content-->
-
-
-      <h2>Profile</h2>
-      <form ng-submit="update()">
-	<p>
-	  <label>Name*</label>
-	  <input type="text" placeholder="Name" ng-model="name" name="user.name" ng-value="user.name" ng-required="true" />
-	</p>
-	<p>
-	  <label>Login</label>
-	  <span>{{user.local.login}}</span>
-	</p>
-	<p>
-	  <label>Email</label>
-	  <span>{{user.local.email}}</span>
-	</p>
-	<p>
-	  <label>New Password*</label>
-	  <input type="password" placeholder="New Password" ng-model="user.password" ng-required="true"/><br/>
-	</p>
-	<p>
-	  <label>New Password Confirmation*</label>
-	  <input type="password" placeholder="New Password Confirmation" ng-model="user.password2" ng-required="true"/><br/>
-	</p>
-	<p>
-	  <button type="submit">Update</button>
-	</p>
-	<p>{{errorMessage}}</p>
-      </form>
-    </div>
-    <div>
-      <h2>Videos</h2>
-      <ul>
-        <li ng-repeat="video in videos">
-          <a href="#/video/{{video._id}}"><img ng-src="{{videoImageUri}}{{video._id}}" />{{video.imageUrl}}</a>
-          <a href="#/video/{{video._id}}">{{video.title}}</a>
-          <p>{{video.description}}</p>
-          <p>{{video.duration}}</p>
-	  <p><a href="#/edit/{{video._id}}">Edit</a></p>
-        </li>
-      </ul>
+        <div class="panel panel-default">
+          <div class="panel-heading"><h3>Profile</h3></div>
+          <div class="panel-body">
+              <form ng-submit="update()">
+                    <div class="form-group col-xs-7">
+                        <label for="name-input">Name *</label>
+                        <input id="name-input" class="form-control" type="text" ng-model="name" ng-model="user.name" ng-required="true" />
+                    </div>
+                    <div class="form-group col-xs-7">
+                      <label for="login-input">Login</label>
+                      <input class="form-control" type="text" id="login-input" value="{{user.local.login}}" readonly/>
+                    </div>
+                    <div class="form-group col-xs-7">
+                      <label for="email-input">Email</label>
+                      <input id="email-input" class="form-control" type="email" value="{{user.local.email}}" disabled/>
+                    </div>
+                    <div class="form-group col-xs-7">
+                      <label for="new-pwd-input">New Password*</label>
+                      <input id="new-pwd-input" class="form-control" type="password" placeholder="New Password" ng-model="user.password" ng-required="true"/><br/>
+                    </div>
+                    <div class="form-group col-xs-7">
+                      <label for="new-pwd-input2">New Password Confirmation*</label>
+                      <input id="new-pwd-input2" class="form-control" type="password" placeholder="Confirm new password" ng-model="user.password2" ng-required="true"/><br/>
+                    </div>
+                    <div class="col-xs-7">
+                        <button class="btn btn-info" type="submit">Update</button>
+                    </div>
+                    <span class="help-block">{{errorMessage}}</span>
+                </form>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3>Videos</h3></div>
+            <div class="panel-body">
+                <ul class="list-unstyled">
+                    <li ng-repeat="video in videos">
+                        <p class="col-xs-7">
+                          <a href="#/video/{{video._id}}"><img class="list-item-image" ng-src="{{videoImageUri}}{{video._id}}" />{{video.imageUrl}}</a>
+                          <a href="#/video/{{video._id}}" class="list-item-title">{{video.title}}</a>
+                        </p>
+                        <p class="col-xs-12">
+                          <span class="badge">{{video.duration}} sec.</span>
+                          <a class="btn btn-xs btn-primary col-xs-offset-5" href="#/edit/{{video._id}}">Edit</a>
+                        </p>
+                        <p class="col-xs-10">
+                          <textarea class="video-desc col-xs-8" readonly>{{video.description}}</textarea>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
   </div>
 </div>

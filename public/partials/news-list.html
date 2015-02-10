@@ -9,12 +9,16 @@
       <div>
         <div ng-repeat="video in news" class="panel panel-default">
         <div class="panel-heading">
-          <a href="#/video/{{video._id}}"><img ng-src="{{videoImageUri}}{{video._id}}" />{{video.imageUrl}}</a>
-          <a href="#/video/{{video._id}}"><h4 class="panel-title">{{video.title}}</h4></a>
+          <a href="#/video/{{video._id}}"><img class="panel-image" ng-src="{{videoImageUri}}{{video._id}}" />{{video.imageUrl}}</a>
+          <a href="#/video/{{video._id}}"><h3 class="panel-title">{{video.title}}</h3></a>
         </div>
         <div class="panel-body">
-          <p>{{video.description}}</p>
-          <p>{{video.duration}}</p>
+          <p class="col-xs-7">
+            <textarea class="video-desc col-xs-12" readonly>{{video.description}}</textarea>
+          </p>
+          <p class="col-xs-7">
+            <span class="badge">{{video.duration}} sec.</span>
+          </p>
         </div>
 
         </div>

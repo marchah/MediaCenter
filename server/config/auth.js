@@ -2,20 +2,20 @@
 module.exports = {
 
     'facebookAuth' : {
-	'clientID' : '',
-	'clientSecret' : '',
-	'callbackURL' : '',
+	'clientID' : 'A',
+	'clientSecret' : 'A',
+	'callbackURL' : 'A'
 	},
 
     'twitterAuth' : {
-	'consumerKey' : '',
-	'consumerSecret' : '',
-	'callbackURL' : ''
+	'consumerKey' : 'A',
+	'consumerSecret' : 'A',
+	'callbackURL' : 'A'
 	},
 
     'googleAuth' : {
-	'clientID' : '',
-	'clientSecret' : '',
-	'callbackURL' : '',
+	'clientID' : 'A',
+	'clientSecret' : 'A',
+	'callbackURL' : 'A'
 	}
 };

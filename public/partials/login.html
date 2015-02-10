@@ -1,31 +1,36 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
-      <!--Sidebar content-->
+    <div class="col-xs-2">
     </div>
-    <div class="col-md-10">
-      <!--Body content-->
-
-
-      <h2>Login</h2>
-     <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google</a>
-     <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
-     <a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span> Twitter</a>
-      <form ng-submit="login()">
-	<p>
-	  <label class="control-label">Email/Login</label>
-	  <input type="text" placeholder="Email/Login" ng-model="user.username" />
-	</p>
-	<p>
-	  <label class="control-label">Password</label>
-	  <input type="password" placeholder="Password" ng-model="user.password" /><br/>
-	</p>
-	<p>
-	  <button type="submit" class="btn btn-primary">Login</button>
-	</p>
-	<p>{{errorMessage}}</p>
-      </form>
-
+    <div class="col-xs-10">
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3>Login</h3></div>
+	    <a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span> Google</a>
+	    <a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>
+	    <a href="/auth/twitter" class="btn btn-info"><span class="fa fa-twitter"></span> Twitter</a>
+            <div class="panel-body">
+                <form ng-submit="login()">
+            	   <div class="form-group col-xs-6">
+            	       <label for="login-input">Email/Login</label>
+            	       <input id="login-input" class="form-control" type="text" placeholder="Email/Login" ng-model="user.username" />
+            	   </div>
+            	   <div class="form-group col-xs-6">
+            	       <label for="pwd-input">Password</label>
+            	       <input id="pwd-input" class="form-control" type="password" placeholder="Password" ng-model="user.password" />
+            	   </div>
+            	   <div class="col-xs-1">
+            	       <button type="submit" class="btn btn-info">Login</button>
+            	   </div>
+                    <div class="col-xs-2">
+                       <button class="btn btn-primary fa fa-facebook" ng-click="loginFacebook()">Facebook</button>
+                       <!--<a href="/auth/facebook" class="btn btn-primary"><span class="fa fa-facebook"></span> Facebook</a>-->
+                    </div>
+                   <span class="help-block col-xs-6" role="alert">
+                        {{errorMessage}}
+                    </span>
+                </form>
+            </div>
+        </div>
     </div>
   </div>
 </div>
