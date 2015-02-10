@@ -21,21 +21,97 @@ body {
     border-color: #40C6D8;
     background-color: #999;
     color: #FFF;
+    border-radius: 5px;
+}
+
+video {
+    border-radius: 5px;
+    width: 100%;
+}
+
+textarea.video-desc {
+    color: gray;
+    min-height: 30px;
+    border-radius: 5px;
+}
+
+textarea.comment {
+    color: black;
+    min-height: 30px;
+    border-radius: 5px;
+    margin-bottom: 5px;
+}
+
+.paging .btn-group {
+    text-align: center;
+}
+
+.well {
+    color: gray;
 }
 
 .panel-default > .panel-heading {
     background-color: #595959;
     border-color: #40C6D8;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.panel-image {
+    display: inline;
+    height: 80px;
 }
 
 .panel-title {
     color: #40C6D8;
+    font-size: 20px;
+    display: inline;
+    line-height: 30px;
+    vertical-align: bottom;
+}
+
+.list-item-image {
+    display: inline;
+    height: 80px;
+}
+
+.list-item-title {
+    color: #046380;
+    font-size: 20px;
+    display: inline;
+    line-height: 30px;
+    vertical-align: bottom;
+    font-weight: bold;
+}
+
+.video-title {
+    color: #046380;
+    font-size: 20px;
+    display: inline;
+    line-height: 30px;
+    vertical-align: bottom;
+    font-weight: bold;
+    font-size: 30px;
 }
 
 .list-group-item {
     text-align: center;
     background-color: #595959;
     border-color: #40C6D8;
+}
+
+.panel .list-group-item {
+    background-color: #999;
+    display: block;
+    text-align: left;
+}
+
+.panel .list-group-item form {
+    text-align: right;
+}
+
+.button-block {
+    text-align: right;
 }
 
 .list-group-item a {
@@ -54,4 +130,16 @@ body {
 
 .badge {
     background-color: #5ed5ee;
+}
+
+.badge-view {
+    background-color: green;
+}
+
+.badge-channel {
+    background-color: purple;
+}
+
+.badge-date {
+    background-color: #DF6D14;
 }
