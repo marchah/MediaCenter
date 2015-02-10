@@ -8,26 +8,20 @@ var Tool	= require(global.PATH_API + '/app/models/Tools.class.js');
 
 module.exports = function(app, passport, isLoggedIn) {
 
-    app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
 
-    /*    app.get('/auth/facebook/callback', function(req, res, next) {
-	    passport.authenticate('facebook', function(err, user) {
-		    console.log(user);
-		    if (err) {return next(err); }
-		    if (!user)
-			return res.send(500);
-		    req.logIn(user, function(err) {
-			    if (err) { return next(err); }
-			    console.log(user);
-			    return res.send(user);
-			});
-		})(req, res, next);
-		});*/
+    app.get('/auth/google/callback',
+            passport.authenticate('google', {
+                    successRedirect : '/#/news',
+                    failureRedirect : '/#/login'
+            }));
+
+    app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
 
     app.get('/auth/facebook/callback',
 	    passport.authenticate('facebook', {
-		    successRedirect : '/channels',
-			failureRedirect : '/channels'
+		    successRedirect : '/#/videos',
+			failureRedirect : '/#/login'
 			}));
 
 
