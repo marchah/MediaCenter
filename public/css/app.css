@@ -51,3 +51,7 @@ body {
 .user-list a:hover {
     color: #2299b2;
 }
+
+.badge {
+    background-color: #5ed5ee;
+}
