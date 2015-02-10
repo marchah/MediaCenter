@@ -4,7 +4,7 @@ module.exports = {
     'facebookAuth' : {
 	'clientID' : '',
 	'clientSecret' : '',
-	'callbackURL' : ''
+	'callbackURL' : '',
 	},
 
     'twitterAuth' : {
@@ -16,6 +16,6 @@ module.exports = {
     'googleAuth' : {
 	'clientID' : '',
 	'clientSecret' : '',
-	'callbackURL' : ''
+	'callbackURL' : '',
 	}
 };
