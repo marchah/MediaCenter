@@ -26,7 +26,7 @@
             </div>
             <div class="form-group col-xs-8">
               <label for="video-input">Video *</label>
-              <input id="video-input" type="file" ng-Change="onFileSelect(this)" ng-file-select="onFileSelect(this)" ng-model="video.src"  ng-required="true" accept="{{VideoTypeSupported}}" />
+              <input id="video-input" type="file" ng-Change="onFileSelect(this)"  ng-file-select="onFileSelect(this)" ng-model="video.src"  ng-required="true" accept="{{VideoTypeSupported}}" />
               <span class="help-block">Supported format: .mp4, .webm and .avi</span>
               <p>{{processing}}</p>
             </div>

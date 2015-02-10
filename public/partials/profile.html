@@ -41,11 +41,17 @@
             <div class="panel-body">
                 <ul class="list-unstyled">
                     <li ng-repeat="video in videos">
-                        <a href="#/video/{{video._id}}"><img ng-src="{{videoImageUri}}{{video._id}}" />{{video.imageUrl}}</a>
-                        <a href="#/video/{{video._id}}">{{video.title}}</a>
-                        <p>{{video.description}}</p>
-                        <p>{{video.duration}}</p>
-                        <p><a href="#/edit/{{video._id}}">Edit</a></p>
+                        <p class="col-xs-7">
+                          <a href="#/video/{{video._id}}"><img class="list-item-image" ng-src="{{videoImageUri}}{{video._id}}" />{{video.imageUrl}}</a>
+                          <a href="#/video/{{video._id}}" class="list-item-title">{{video.title}}</a>
+                        </p>
+                        <p class="col-xs-12">
+                          <span class="badge">{{video.duration}} sec.</span>
+                          <a class="btn btn-xs btn-primary col-xs-offset-5" href="#/edit/{{video._id}}">Edit</a>
+                        </p>
+                        <p class="col-xs-10">
+                          <textarea class="video-desc col-xs-8" readonly>{{video.description}}</textarea>
+                        </p>
                     </li>
                 </ul>
             </div>

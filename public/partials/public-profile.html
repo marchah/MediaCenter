@@ -25,10 +25,16 @@
         <div class="panel-body">
           <ul class="list-unstyled">
             <li ng-repeat="video in videos">
-              <a href="#/video/{{video._id}}"><img ng-src="{{videoImageUri}}{{video._id}}" />{{video.imageUrl}}</a>
-              <a href="#/video/{{video._id}}">{{video.title}}</a>
-              <p>{{video.description}}</p>
-              <p>{{video.duration}}</p>
+              <p class="col-xs-7">
+                <a href="#/video/{{video._id}}"><img class="list-item-image" ng-src="{{videoImageUri}}{{video._id}}" />{{video.imageUrl}}</a>
+                <a href="#/video/{{video._id}}" class="list-item-title">{{video.title}}</a>
+              </p>
+              <p class="col-xs-12">
+                <span class="badge">{{video.duration}} sec.</span>
+              </p>
+              <p class="col-xs-10">
+                <p class="well col-xs-8" readonly>{{video.description}}</p>
+              </p>
             </li>
           </ul>
         </div>
