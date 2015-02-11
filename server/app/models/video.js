@@ -1,7 +1,7 @@
 // load the things we need
 var mongoose = require('mongoose');
 
-// define the schema for our user model
+// define the schema for our video model
 var videoSchema = mongoose.Schema({
     title	: {type: String},
     description : {type: String},
