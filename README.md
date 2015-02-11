@@ -53,7 +53,7 @@ node server/server.js
 
 TODO
 ----
-
+* In /channels display nb video per channel in title and don't display channel with zero video
 * Bug: delete video -> delete /video/undefined
 * Bug: upload title
 * ~~Bug: comment form -> when use isLoggin, comment text is undefined~~
