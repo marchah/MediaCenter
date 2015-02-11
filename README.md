@@ -53,24 +53,12 @@ node server/server.js
 
 TODO
 ----
-* ~~In /channels display nb video per channel in title and don't display channel with zero video~~
 * Bug: delete video -> delete /video/undefined
 * Bug: upload title
 * Bug: possible bug on add comment
 * Bug: sometimes picture edit datas are empty
-* ~~Bug: comment form -> when use isLoggin, comment text is undefined~~
 * Bug: when loggin HTML5 video tag take a long time to load
-* ~~multisource video support~~
-* ~~video image~~
-* ~~video duration~~
-* ~~get authentication when user reload page~~
-* ~~public user profile~~
-* ~~upload video message success/erreur~~
-* ~~private user profile: update video, delete video~~
-* ~~search video~~
 * style
-* ~~Bonus: video comments~~
-* ~~Bonus: video tags~~
 * Bonus: search field in every page
 * Bonus: signin ~~Facebook~~/twitter/~~google+~~
 
