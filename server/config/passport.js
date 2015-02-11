@@ -37,6 +37,24 @@ module.exports = function(passport) {
     // LOCAL LOGIN =============================================================
     // =========================================================================
 
+    passport.use('local-login', new LocalStrategy({
+        usernameField : 'login',
+        passwordField : 'password'},
+	function(login, password, done) {
+	    User.findOne({$or:[{'local.email': login.toLowerCase()}, {'local.login': login.toLowerCase()}]}, function(err, user) {
+		    if (err) {
+			reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "config/passport.js: local-login User.findOne ", err);
+			return done(err);
+		    }
+		    if (!user)
+			return done(null, false, {message: constantes.ERROR_UNKNOW_USER});
+                  if (!user.validPassword(password))
+                      return done(null, false, {message: constantes.ERROR_WRONG_PASSWORD});
+                  else
+                      return done(null, user);
+              });
+	}
+    ));
 
     // =========================================================================
     // FACEBOOK ================================================================
@@ -74,6 +92,7 @@ module.exports = function(passport) {
     // =========================================================================
     // GOOGLE ==================================================================
     // =========================================================================
+
     passport.use(new GoogleStrategy({
         clientID        : configAuth.googleAuth.clientID,
         clientSecret    : configAuth.googleAuth.clientSecret,
@@ -85,7 +104,6 @@ module.exports = function(passport) {
                 if (err)
                     return done(err);
                 if (user) {
-		    console.log(user);
                     return done(null, user);
                 } else {
 		    var newUser          = new User();
