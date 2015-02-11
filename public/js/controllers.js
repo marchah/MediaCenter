@@ -109,7 +109,6 @@ mediacenterControllers.controller('VideoEditCtrl', ['$scope', '$rootScope', '$ro
 	  $http.get(Settings.apiUri + 'video/' + $routeParams.videoId).success(function(data) {
 		  if ($scope.user._id !== data.video.idUser)
 		      $location.url('/news');
-	      console.log(data.video);
 		  $scope.video = data.video;
 		  $scope.videoImageUri = Settings.apiUri + "video/picture/";
 		  $scope.video.tagsString = '';
@@ -123,9 +122,8 @@ mediacenterControllers.controller('VideoEditCtrl', ['$scope', '$rootScope', '$ro
 	  });
 
 	  $http.get(Settings.apiUri + 'channels').success(function(data) {
-		  $scope.channels = data.channels;
-		  $scope.video = {idChannel: data.channels[0]._id};
-	      });
+	      $scope.channels = data.channels;
+	  });
 
 	  $scope.delete = function() {
 	      $scope.message = "";
