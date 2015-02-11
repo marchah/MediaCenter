@@ -123,6 +123,7 @@ mediacenterControllers.controller('VideoEditCtrl', ['$scope', '$rootScope', '$ro
 
 	  $http.get(Settings.apiUri + 'channels').success(function(data) {
 	      $scope.channels = data.channels;
+//		  $scope.video = {idChannel: data.channels[0]._id};
 	  });
 
 	  $scope.delete = function() {
@@ -354,7 +355,7 @@ mediacenterControllers.controller('VideoCreateCtrl', ['$scope', '$rootScope', '$
 	      }
 	      if (typeof $scope.video === "undefined")
 		  $scope.video = {title: $files[0].name.substr(0, $files[0].name.lastIndexOf('.'))};
-	      else if (typeof $scope.title === "undefined" || $scope.title.length <= 0)
+	      else if (typeof $scope.video.title === "undefined" || $scope.video.title.length <= 0)
 		  $scope.video.title = $files[0].name.substr(0, $files[0].name.lastIndexOf('.'));
 	      $upload.upload({
 		      url: Settings.apiUri + 'uploadVideo',
@@ -379,11 +380,14 @@ mediacenterControllers.controller('VideoCreateCtrl', ['$scope', '$rootScope', '$
 		    return ;
 		}
 
+		var tags = [];
+		if (typeof $scope.video.tags !== 'undefined')
+		    tags = $scope.video.tags.split(Settings.Upload.TagDelimiter);
 		$http.post(Settings.apiUri + 'video', {
 		    title: $scope.video.title,
 		    description: $scope.video.description,
 		    idChannel: $scope.video.idChannel,
-		    tags: $scope.video.tags.split(Settings.Upload.TagDelimiter),
+		    tags: tags,
 		    path: $scope.path
 		})
 		.success(function(data){
