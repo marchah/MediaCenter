@@ -123,7 +123,6 @@ mediacenterControllers.controller('VideoEditCtrl', ['$scope', '$rootScope', '$ro
 
 	  $http.get(Settings.apiUri + 'channels').success(function(data) {
 	      $scope.channels = data.channels;
-//		  $scope.video = {idChannel: data.channels[0]._id};
 	  });
 
 	  $scope.delete = function() {
