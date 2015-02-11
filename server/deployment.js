@@ -100,7 +100,7 @@ var video = function() {
 };
 
 user();
-channel();
+//channel();
 //video();
 
 console.log("Ctrl + c for exit");

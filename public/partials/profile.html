@@ -13,19 +13,19 @@
                         <label for="name-input">Name *</label>
                         <input id="name-input" class="form-control" type="text" ng-model="name" ng-model="user.name" ng-required="true" />
                     </div>
-                    <div class="form-group col-xs-7">
+                    <div class="form-group col-xs-7" ng-if="isLocalLogin()">
                       <label for="login-input">Login</label>
                       <input class="form-control" type="text" id="login-input" value="{{user.local.login}}" readonly/>
                     </div>
-                    <div class="form-group col-xs-7">
+                    <div class="form-group col-xs-7" ng-if="isLocalLogin()">
                       <label for="email-input">Email</label>
                       <input id="email-input" class="form-control" type="email" value="{{user.local.email}}" disabled/>
                     </div>
-                    <div class="form-group col-xs-7">
+                    <div class="form-group col-xs-7" ng-if="isLocalLogin()">
                       <label for="new-pwd-input">New Password*</label>
                       <input id="new-pwd-input" class="form-control" type="password" placeholder="New Password" ng-model="user.password" ng-required="true"/><br/>
                     </div>
-                    <div class="form-group col-xs-7">
+                    <div class="form-group col-xs-7" ng-if="isLocalLogin()">
                       <label for="new-pwd-input2">New Password Confirmation*</label>
                       <input id="new-pwd-input2" class="form-control" type="password" placeholder="Confirm new password" ng-model="user.password2" ng-required="true"/><br/>
                     </div>

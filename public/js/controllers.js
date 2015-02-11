@@ -281,6 +281,11 @@ mediacenterControllers.controller('ProfileCtrl', ['$scope', '$rootScope', '$http
 	      $location.url('/news');
 	  $scope.name = $scope.user["name"];
 
+	   $scope.isLocalLogin = function() {
+	       if (typeof $scope.user.local !== 'undefined')
+		   return true;
+	       return false;
+	   };
 
 	  $http.get(Settings.apiUri + 'user/' + $scope.user._id).success(function(data) {
 		  $scope.user = data.user;
