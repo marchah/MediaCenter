@@ -20,26 +20,17 @@ mediacenterControllers.controller('VideoListCtrl', ['$scope', '$rootScope', '$ro
 		if (typeof $routeParams.idChannel != 'undefined')
 		    var idChannel = $routeParams.idChannel + "/";
 		$http.get(Settings.apiUri + 'videos/' + idChannel + page, {params: {search: $scope.query}}).success(function(data) {
-			$scope.videos = data.videos;
-			if (typeof data.videos != 'undefined' && data.count != 0 && data.videos.length != 0)
-			    $scope.nbPages = Math.ceil(data.count / data.videos.length);
-			else
-			    $scope.nbPages = 0;
-			$scope.videoImageUri = Settings.apiUri + "video/picture/";
-			$scope.idChannel = idChannel;
-			// $http.get(Settings.apiUri + 'channels').success(function(data) {
-			// 	var channelId = (typeof $routeParams.idChannel !== 'undefined') ? (parseInt($routeParams.idChannel) - 1) : 0;
-			// 	var channelName = data.channels[channelId].name;
-			// 	console.log($routeParams.idChannel);
-			// 	console.log(channelId, channelName);
-			// 	$scope.channelName = channelName;
-				$scope.getNumber = function(num) {
-			    return new Array(num);
-			}
-			// });
-
-
-		    });
+		    $scope.videos = data.videos;
+		    if (typeof data.videos != 'undefined' && data.count != 0 && data.videos.length != 0)
+			$scope.nbPages = Math.ceil(data.count / data.videos.length);
+		    else
+			$scope.nbPages = 0;
+		    $scope.videoImageUri = Settings.apiUri + "video/picture/";
+		    $scope.idChannel = idChannel;
+		    $scope.getNumber = function(num) {
+			return new Array(num);
+		    }
+		});
 	    };
 	    $scope.search(parseInt($routeParams.page));
 	}]);
