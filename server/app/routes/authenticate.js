@@ -16,11 +16,19 @@ module.exports = function(app, passport, isLoggedIn) {
                     failureRedirect : '/#/login'
             }));
 
+    app.get('/auth/twitter', passport.authenticate('twitter'));
+
+    app.get('/auth/twitter/callback',
+        passport.authenticate('twitter', {
+            successRedirect : '/#/news',
+            failureRedirect : '/#/login'
+        }));
+
     app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
 
     app.get('/auth/facebook/callback',
 	    passport.authenticate('facebook', {
-		    successRedirect : '/#/videos',
+		    successRedirect : '/#/news',
 			failureRedirect : '/#/login'
 	    }));
     
