@@ -400,7 +400,7 @@ module.exports = function(app, passport, isLoggedIn) {
 							res.status(500).send({message: constantes.ERROR_API_DB});
 							return ;
 						    }
-						    res.send({message: constantes.REQUEST_API_SUCCESS});
+						    res.send({message: constantes.REQUEST_API_SUCCESS, idVideo: newVideo._id});
 						});
 				});
 				});

@@ -384,8 +384,9 @@ mediacenterControllers.controller('VideoCreateCtrl', ['$scope', '$rootScope', '$
 		    path: $scope.path
 		})
 		.success(function(data){
-			$scope.errorMessage = data.message;
-		    })
+		    $scope.errorMessage = data.message;
+		    $location.url('/video/' + data.idVideo);
+		})
 		.error(function(data, status, headers, config){
 			if (typeof data.message !== 'undefined')
 			    $scope.errorMessage = "Upload failed: " + data.message;
