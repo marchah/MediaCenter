@@ -53,9 +53,9 @@ node server/server.js
 
 TODO
 ----
-* Bug: delete video -> delete /video/undefined
+* ~~Bug: delete video -> delete /video/undefined~~
 * Bug: possible bug on add comment
-* Bug: when loggin HTML5 video tag take a long time to load
+* ~~Bug: when loggin HTML5 video tag take a long time to load~~
 * style
 * Bonus: search field in every page
 * Bonus: signin ~~Facebook~~/twitter/~~google+~~
