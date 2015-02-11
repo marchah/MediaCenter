@@ -56,7 +56,6 @@ TODO
 * Bug: delete video -> delete /video/undefined
 * Bug: upload title
 * Bug: possible bug on add comment
-* Bug: sometimes picture edit datas are empty
 * Bug: when loggin HTML5 video tag take a long time to load
 * style
 * Bonus: search field in every page
