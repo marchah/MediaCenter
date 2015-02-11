@@ -9,11 +9,25 @@ var Video      = require(global.PATH_API + '/app/models/video');
 module.exports = function(app, passport, isLoggedIn) {
 
     app.get('/channels', function(req, res) {
+	Channel.find({}, function(err, channels) {
+	    if (err) {
+		reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/channel.js: /channels Channel.find()", err);
+		res.setHeader('Content-Type', 'application/json');
+		res.json({message: constantes.ERROR_API_DB, channels: false});
+		return ;
+	    }
+	    res.setHeader('Content-Type', 'application/json');
+	    res.json({message: constantes.REQUEST_API_SUCCESS, channels: channels});
+	    return ;
+	});
+    });
+
+    app.get('/channels/list', function(req, res) {
 	async.waterfall([
 	    function(callback){
 		Channel.find({}, function(err, channels) {
 		    if (err) {
-			reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/channel.js: /channels Channel.find()", err);
+			reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/channel.js: /channels/list Channel.find()", err);
 			callback(err);
 		    }
 		    else {

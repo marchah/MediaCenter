@@ -104,11 +104,12 @@ mediacenterControllers.controller('VideoEditCtrl', ['$scope', '$rootScope', '$ro
 	  if (typeof $scope.user === 'undefined')
 	      $location.url('/news');
 	  else {
-	  $scope.name = $scope.user["name"];
+	      $scope.name = $scope.user["name"];
 
 	  $http.get(Settings.apiUri + 'video/' + $routeParams.videoId).success(function(data) {
 		  if ($scope.user._id !== data.video.idUser)
 		      $location.url('/news');
+	      console.log(data.video);
 		  $scope.video = data.video;
 		  $scope.videoImageUri = Settings.apiUri + "video/picture/";
 		  $scope.video.tagsString = '';
@@ -169,7 +170,7 @@ mediacenterControllers.controller('VideoEditCtrl', ['$scope', '$rootScope', '$ro
 
 mediacenterControllers.controller('ChannelListCtrl', ['$scope', '$http', 'Settings',
 	function ($scope, $http, Settings) {
-	    $http.get(Settings.apiUri + 'channels').success(function(data) {
+	    $http.get(Settings.apiUri + 'channels/list').success(function(data) {
 		$scope.channels = data.channels;
 	    });
 	}]);
@@ -194,10 +195,14 @@ mediacenterControllers.controller('SessionCtrl', ['$scope', '$rootScope', '$http
 
 mediacenterControllers.controller('NewsListCtrl', ['$scope', '$http', 'Settings',
 	function ($scope, $http, Settings) {
-	    $http.get(Settings.apiUri + 'news').success(function(data) {
-		$scope.news = data.news;
-		$scope.videoImageUri = Settings.apiUri + "video/picture/";
-	    });
+	    $http.get(Settings.apiUri + 'news')
+		.success(function(data) {
+		    $scope.news = data.news;
+		    $scope.videoImageUri = Settings.apiUri + "video/picture/";
+		})
+		.error(function(data, status, headers, config){
+		    alert(data.message);
+		});
 	}]);
 
 mediacenterControllers.controller('LoginCtrl', ['$scope', '$rootScope', '$http', '$location', 'Settings',
@@ -324,8 +329,8 @@ mediacenterControllers.controller('PublicProfileCtrl', ['$scope', '$http', '$rou
 	}]);
 
 
-mediacenterControllers.controller('VideoCreateCtrl', ['$scope', '$rootScope', '$http', '$location', '$upload', 'Settings',
-       function ($scope, $rootScope, $http, $location, $upload, Settings) {
+mediacenterControllers.controller('VideoCreateCtrl', ['$scope', '$rootScope', '$timeout', '$http', '$location', '$upload', 'Settings',
+       function ($scope, $rootScope, $timeout, $http, $location, $upload, Settings) {
 
 	     if (typeof $scope.user === 'undefined')
 		 $location.url('/news');
@@ -384,8 +389,10 @@ mediacenterControllers.controller('VideoCreateCtrl', ['$scope', '$rootScope', '$
 		    path: $scope.path
 		})
 		.success(function(data){
-		    $scope.errorMessage = data.message;
-		    $location.url('/video/' + data.idVideo);
+		    $scope.errorMessage = data.message + " You will be redirect to the video in 5s.";
+		    $timeout(function() {
+			$location.url('/edit/' + data.idVideo);
+		    }, 5000);
 		})
 		.error(function(data, status, headers, config){
 			if (typeof data.message !== 'undefined')
