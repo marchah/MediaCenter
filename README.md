@@ -69,5 +69,5 @@ TODO
 * ~~Bonus: video comments~~
 * ~~Bonus: video tags~~
 * Bonus: search field in every page
-* Bonus: signin Facebook/twitter/google+
+* Bonus: signin ~~Facebook~~/twitter/~~google+~~
 
