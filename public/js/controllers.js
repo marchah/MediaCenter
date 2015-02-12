@@ -60,6 +60,7 @@ mediacenterControllers.controller('VideoDetailCtrl', ['$scope', '$sce', '$routeP
 	      if (!data.video)
 		  alert(data.message);
 	      $scope.videoImageUri = Settings.apiUri + "video/picture/";
+	      console.log(data.video);
 	      $http.post(Settings.apiUri + 'relatedVideo/' + data.video._id, {tags: data.video.tags}).success(function(data) {
 		      $scope.video.related = data.videos;
 		  });
