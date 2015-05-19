@@ -29,6 +29,7 @@ node_modules
 
 *.txt
 bower_components/
-server/conf/auth.js
+#server/conf/auth.js
 server/video/*
+server/picture/*
 *~
