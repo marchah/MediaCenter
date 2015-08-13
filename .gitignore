@@ -31,4 +31,5 @@ node_modules
 bower_components/
 server/conf/auth.js
 server/video/*
+server/picture/*
 *~
