@@ -1,26 +1,40 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-2">
-      <!--Sidebar content-->
-    </div>
-    <div class="col-md-10">
+    <div class="col-xs-offset-2 col-xs-8">
       <!--Body content-->
-      Search: <input ng-model="query" ng-change="filter()" focus-me="isFocused=true" >
-      <ul>
-        <li ng-repeat="video in videos">
-          <a href="#/video/{{video._id}}"><img ng-src="{{videoImageUri}}{{video._id}}" />{{video.imageUrl}}</a>
-          <a href="#/video/{{video._id}}">{{video.title}}</a>
-          <p>{{video.description}}</p>
-          <p>{{video.duration}}</p>
-        </li>
-      </ul>
-      <table>
-	<tr>
-	  <td ng-repeat="i in getNumber(nbPages) track by $index">
-	    <a href="#/videos/{{idChannel}}{{$index+1}}">{{$index+1}}</a>
-	  </td>
-	</tr>
-      </table>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title col-xs-6">{{channelName}}</div>
+          <div class="input-group col-xs-6">
+            <input type="text" class="form-control" placeholder="Search ..." ng-model="query" ng-change="filter()" focus-me="isFocused=true" />
+            <span class="input-group-btn">
+              <button class="btn btn-info"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+            </span>
+          </div>
+        </div>
+        <div class="panel-body">
+          <ul class="list-unstyled">
+            <li ng-repeat="video in videos">
+            <p class="col-xs-7">
+                  <a href="#/video/{{video._id}}"><img class="list-item-image" ng-src="{{videoImageUri}}{{video._id}}" />{{video.imageUrl}}</a>
+                  <a href="#/video/{{video._id}}" class="list-item-title">{{video.title}}</a>
+                </p>
+                <p class="col-xs-12">
+                  <span class="badge">{{video.duration}} sec.</span>
+
+                </p>
+                <p class="col-xs-10">
+                  <p class="well well-sm col-xs-6" readonly>{{video.description}}</p>
+                </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="btn-toolbar">
+        <div class="btn-group" role="group">
+          <a class="btn btn-default" ng-repeat="i in getNumber(nbPages) track by $index" href="#/videos/{{idChannel}}{{$index+1}}">{{$index+1}}</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

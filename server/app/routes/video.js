@@ -16,7 +16,7 @@ var Channel    = require(global.PATH_API + '/app/models/channel');
 
 var Search	= require(global.PATH_API + '/app/tools/search.js');
 
-var multipartMiddleware = multipart(/*{uploadDir: global.PATH_API + constantes.PATH_FOLDER_TMP_VIDEO }*/);
+var multipartMiddleware = multipart();
 
 module.exports = function(app, passport, isLoggedIn) {
 
@@ -277,11 +277,10 @@ module.exports = function(app, passport, isLoggedIn) {
 	});
 
     app.get('/news', function(req, res) {
-	    Video.find({}, {title: true, description: true, duration: true, pathImage: true}, {sort: {date: 'desc'}, limit: constantes.LIMIT_NB_NEWS}, function(err, videos) {
+	    Video.find({}, {title: true, description: true, duration: true, pathImage: true}, {sort: {uploadDate: 'desc'}, limit: constantes.LIMIT_NB_NEWS}, function(err, videos) {
 	    if (err) {
 		reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /news Video.find()", err);
-		res.setHeader('Content-Type', 'application/json');
-		res.json({message: constantes.ERROR_API_DB, news: false});
+		res.status(500).send({message: constantes.ERROR_API_DB, news: false});
 		return ;
 	    }
 
@@ -289,9 +288,7 @@ module.exports = function(app, passport, isLoggedIn) {
 		if (videos[index].description.length > constantes.SIZE_MAX_DESCRIPTION_LIST_VIDEO)
 		    videos[index].description = videos[index].description.substr(0, constantes.SIZE_MAX_DESCRIPTION_LIST_VIDEO) + '...';
 	    }
-
-	    res.setHeader('Content-Type', 'application/json');
-	    res.json({message: constantes.REQUEST_API_SUCCESS, news: videos});
+	    res.send({message: constantes.REQUEST_API_SUCCESS, news: videos});
 	    return ;
 	});
     });
@@ -375,35 +372,34 @@ module.exports = function(app, passport, isLoggedIn) {
 					})
 				    .saveToFile(global.PATH_API + videoURI + '.webm');
 
-			    fs.ensureDir(global.PATH_API + constantes.PATH_FOLDER_IMAGE, function(err) {
-				    if (err) {
-					reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /upload fs.ensureDir(PATH_FOLDER_IMAGE)", err);
-				    }
-				    else {
-					newVideo.pathImage = constantes.PATH_FOLDER_IMAGE + newVideo._id + ".png";
-
-					ffmpeg(global.PATH_API + newVideo.path)
-					    .screenshots({
-						    timestamps: ['5%'],
-							filename: newVideo._id + '.png',
-							folder: global.PATH_API + constantes.PATH_FOLDER_IMAGE,
-							size: '320x240'
-					    });
-				    }
-
-				    ffmpeg.ffprobe(global.PATH_API + newVideo.path, function(err, metadata) {
-					    if (!err)
-						newVideo.duration = Math.ceil(metadata.format.duration);				    
-					    newVideo.save(function(err) {
-						    if (err) {
-							reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /upload Video.save()", err);
-							res.status(500).send({message: constantes.ERROR_API_DB});
-							return ;
-						    }
-						    res.send({message: constantes.REQUEST_API_SUCCESS});
-						});
+			fs.ensureDir(global.PATH_API + constantes.PATH_FOLDER_IMAGE, function(err) {
+			    if (err) {
+				reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /upload fs.ensureDir(PATH_FOLDER_IMAGE)", err);
+			    }
+			    else {
+				newVideo.pathImage = constantes.PATH_FOLDER_IMAGE + newVideo._id + ".png";
+				ffmpeg(global.PATH_API + newVideo.path)
+				    .screenshots({
+					timestamps: ['5%'],
+					filename: newVideo._id + '.png',
+					    folder: global.PATH_API + constantes.PATH_FOLDER_IMAGE,
+					size: '320x240'
+				    });
+			    }
+			    
+				ffmpeg.ffprobe(global.PATH_API + newVideo.path, function(err, metadata) {
+				    if (!err)
+					newVideo.duration = Math.ceil(metadata.format.duration);				    
+				    newVideo.save(function(err) {
+					if (err) {
+					    reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "app/route/video.js: /upload Video.save()", err);
+					    res.status(500).send({message: constantes.ERROR_API_DB});
+					    return ;
+					}
+					res.send({message: constantes.REQUEST_API_SUCCESS, idVideo: newVideo._id});
+				    });
 				});
-				});
+			    });
 			})
 			});
 	});

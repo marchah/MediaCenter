@@ -1,6 +1,8 @@
 // load all the things we need
 var LocalStrategy    = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
+var TwitterStrategy  = require('passport-twitter').Strategy;
+var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var Validator        = require('validator');
 
 // load up the user model
@@ -36,6 +38,24 @@ module.exports = function(passport) {
     // LOCAL LOGIN =============================================================
     // =========================================================================
 
+    passport.use('local-login', new LocalStrategy({
+        usernameField : 'login',
+        passwordField : 'password'},
+	function(login, password, done) {
+	    User.findOne({$or:[{'local.email': login.toLowerCase()}, {'local.login': login.toLowerCase()}]}, function(err, user) {
+		    if (err) {
+			reporting.saveErrorAPI(constantes.TYPE_ERROR_BDD, "config/passport.js: local-login User.findOne ", err);
+			return done(err);
+		    }
+		    if (!user)
+			return done(null, false, {message: constantes.ERROR_UNKNOW_USER});
+                  if (!user.validPassword(password))
+                      return done(null, false, {message: constantes.ERROR_WRONG_PASSWORD});
+                  else
+                      return done(null, user);
+              });
+	}
+    ));
 
     // =========================================================================
     // FACEBOOK ================================================================
@@ -49,14 +69,11 @@ module.exports = function(passport) {
     function(token, refreshToken, profile, done) {
 	process.nextTick(function() {
 		User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
-			console.log('etst');
 			if (err)
 			    return done(err);
 			if (user) {
-			    console.log('exist');
 			    return done(null, user);
 			} else {
-			    console.log('new');
 			    var newUser            = new User();
 			    newUser.name           = profile.name.givenName + ' ' + profile.name.familyName;
 			    newUser.facebook.id    = profile.id;
@@ -72,6 +89,76 @@ module.exports = function(passport) {
 		    });
 	    });
     }));
+
+    // =========================================================================
+    // TWITTER =================================================================
+    // =========================================================================
+    passport.use(new TwitterStrategy({
+        consumerKey     : configAuth.twitterAuth.consumerKey,
+        consumerSecret  : configAuth.twitterAuth.consumerSecret,
+        callbackURL     : configAuth.twitterAuth.callbackURL
+    },
+    function(token, tokenSecret, profile, done) {
+        process.nextTick(function() {
+            User.findOne({ 'twitter.id' : profile.id }, function(err, user) {
+                if (err)
+                    return done(err);
+                if (user) {
+                    return done(null, user);
+                } else {
+                    var newUser                 = new User();
+		    newUser.name                = profile.displayName;
+                    newUser.twitter.id          = profile.id;
+                    newUser.twitter.token       = token;
+                    newUser.twitter.username    = profile.username;
+                    newUser.twitter.displayName = profile.displayName;
+                    newUser.save(function(err) {
+                        if (err)
+                            throw err;
+                        return done(null, newUser);
+                    });
+                }
+            });
+	    
+	});
+    }));
+
+
+    // =========================================================================
+    // GOOGLE ==================================================================
+    // =========================================================================
+
+    passport.use(new GoogleStrategy({
+        clientID        : configAuth.googleAuth.clientID,
+        clientSecret    : configAuth.googleAuth.clientSecret,
+        callbackURL     : configAuth.googleAuth.callbackURL,
+    },
+    function(token, refreshToken, profile, done) {
+        process.nextTick(function() {
+            User.findOne({ 'google.id' : profile.id }, function(err, user) {
+                if (err)
+                    return done(err);
+                if (user) {
+                    return done(null, user);
+                } else {
+		    var newUser          = new User();
+		    newUser.name         = profile.displayName;
+                    newUser.google.id    = profile.id;
+                    newUser.google.token = token;
+                    newUser.google.name  = profile.displayName;
+                    newUser.google.email = profile.emails[0].value;
+
+		    newUser.save(function(err) {
+			if (err)
+			    throw err;
+			return done(null, newUser);
+		    });
+		}
+            });
+        });
+
+    }));
+
 
 };
 

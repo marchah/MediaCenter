@@ -1,50 +1,44 @@
-<h1>{{video.title}}</h1>
+<div class="row">
+  <div class="panel panel-default col-xs-offset-1 col-xs-10">
+    <div class="panel-body">
+      <div class="thumnail col-xs-6">
+        <video ng-src="{{videoURL}}" controls></video>
+      </div>
+      <div class="col-xs-6"><b>Description</b><p class="well well-sm">{{video.description}}</p></div>
+      <p class="col-xs-3"><b>Duration</b>  <span class="badge">{{video.duration}}</span></p>
+      <p class="col-xs-3"><b>View</b>  <span class="badge badge-view">{{video.view}}</span></p>
+      <p class="col-xs-3"><b>Channel</b>  <span class="badge badge-channel">{{video.channel}}</span></p>
+       <p class="col-xs-3"><b>Upload Date</b>  <span class="badge badge-date">{{video.uploadDate | date:'yyyy-MM-dd HH:mm:ss' }}</span></p>
+      <div class="col-xs-12 caption video-title">
+        {{video.title}}
+      </div>
+     <p class="col-xs-12"><b>User</b> <a href="#/user/{{video.idUser}}"><span>{{video.user}}</span> </a></p>
+   </div>
+   <div class="col-xs-6 list-item-title">Related Videos</div>
+    <div class="col-xs-6 list-item-title">Comments</div>
+   <ul class="list-group col-xs-6">
+      <li class="list-group-item" ng-repeat="relatedVideo in video.related">
+              <a href="#/video/{{relatedVideo._id}}"><img class="list-item-image" ng-src="{{videoImageUri}}{{relatedVideo._id}}" />{{relatedVideo.imageUrl}}</a>
+              <a href="#/video/{{relatedVideo._id}}" class="list-item-title">{{relatedVideo.title}}</a>
+      </li>
+    </ul>
+   <ul class="list-group col-xs-6">
+      <li class="list-group-item" ng-repeat="comment in comments">
+              <a href="#/user/{{comment.idUser}}">{{comment.user}}</a>
+              <span>{{comment.date | date:'yyyy-MM-dd HH:mm:ss'}}</span>
+              <p class="well well-sm">{{comment.text}}</p>
+      </li>
+      <li ng-show="isLoggin()" class="list-group-item">
+        <form ng-submit="submitComment()">
+        <textarea class="comment col-xs-12" placeholder="Comment here ..." ng-model="comment" ng-required="true"></textarea>
+        <button type="submit" class="btn btn-success">Add</button>
+        <p>{{errorMessage}}{{message}}</p>
+        </form>
+      </li>
+    </ul>
+    <p class="help-block">{{errorComments}}</p>
+  </div>
+  </div>
 
-<video ng-src="{{videoURL}}" controls></video>
 
-<p>{{video.description}}</p>
 
-<ul>
-  <li>
-    <span>Duration</span>
-    <dd>{{video.duration}}</dd>
-  </li>
-  <li>
-    <span>View</span>
-    <dd>{{video.view}}</dd>
-  </li>
-  <li>
-    <span>Channel</span>
-    <dd><a href="#/videos/{{video.idChannel}}/1">{{video.channel}}</a></dd>
-  </li>
-  <li>
-    <span>User</span>
-    <dd><a href="#/user/{{video.idUser}}">{{video.user}}</a></dd>
-  </li>
-  <li>
-    <span>Upload Date</span>
-    <dd>{{video.uploadDate}}</dd>
-  </li>
-</ul>
-<div ng-repeat="relatedVideo in video.related">
-   <a href="#/video/{{relatedVideo._id}}"><img ng-src="{{videoImageUri}}{{relatedVideo._id}}" /></a>
-   <a href="#/video/{{relatedVideo._id}}">{{relatedVideo.title}}</a>
-</div>
-
-<div ng-repeat="comment in comments">
-  <a href="#/user/{{comment.idUser}}">{{comment.user}}</a>
-  <p>{{comment.date}}</p>
-  <p>{{comment.text}}</p>
-</div>
-<p>{{errorComments}}</p>
-<div ng-show="isLoggin()">
-  <form ng-submit="submitComment()">
-    <p>
-      <input type="text" placeholder="Comment" name="comment" ng-model="comment" ng-required="true" />
-    </p>
-    <p>
-      <button type="submit">Add</button>
-    </p>
-    <p>{{errorMessage}}{{message}}</p>
-  </form>
-<div>

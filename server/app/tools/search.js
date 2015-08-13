@@ -37,10 +37,9 @@ module.exports = {
 	    searchQuery.idChannel = idChannel;
 	if (numPage < constantes.START_NUMBER_PAGE)
 	    numPage = constantes.START_NUMBER_PAGE;
-	/*if (nbVideoPerPage < constantes.MIN_NB_VIDEO_PER_PAGE
+	if (nbVideoPerPage < constantes.MIN_NB_VIDEO_PER_PAGE
 	    || nbVideoPerPage > constantes.MAX_NB_VIDEO_PER_PAGE)
-	    nbVideoPerPage = constantes.DEFAULT_NB_VIDEO_PER_PAGE;*/
-nbVideoPerPage = 1;
+	    nbVideoPerPage = constantes.DEFAULT_NB_VIDEO_PER_PAGE;
 	var parent = this;
 	this.queryVideo(searchQuery, regex, numPage, nbVideoPerPage, function(err, videos) {
 	    if (err) {

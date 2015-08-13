@@ -8,7 +8,7 @@ var Video    = require('./app/models/video');
 
 var user = function() {
     console.log("****** User Begin ******");
-    
+
     var newUser            = new User();
     newUser.name	   = 'User Test 1';
     newUser.local.login    = 'user1';
@@ -100,7 +100,7 @@ var video = function() {
 };
 
 user();
-channel();
+//channel();
 //video();
 
 console.log("Ctrl + c for exit");
