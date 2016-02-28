@@ -43,6 +43,37 @@ cd MediaCenter
 sudo npm install
 ````
 
+Backend API
+````
+POST /login param : login (String) (accept also email but the file has to be named « login »), password (String)
+	→ Redirection 302
+•	Success : GET /loginSuccess
+JSON{isAuthenticated: Boolean, message: String}
+•	Failure : GET /loginFailure
+JSON{isAuthenticated: Boolean, message: String}
+
+
+GET /listChannel
+•	Succes : JSON {listChannel : {_id : ObjectId, name : String}, message : String}
+•	Failure : JSON {listChannel : false, message : String}
+
+
+GET /listVideo
+GET /listVideo/:numPage(\\d+)
+GET /listVideo/:idChannel (Warning : don't use this route with idChannel = 0 because the API will think your mean the page number)
+GET /listVideo/:numPage(\\d+)/:nbVideoPerPage(\\d+)
+GET /listVideo/:idChannel/:numPage(\\d+) (Warning : don't use this route with idChannel = 0 because the API will think your mean the page number)
+GET /listVideo/:idChannel/:numPage(\\d+)/:nbVideoPerPage(\\d+)
+	If general search put /listChannel/0/0/0
+→ API ignore idChannel when it's not a valid id
+→ if numPage < 1 API use numPage = 1
+→  if nbVideoPerPage < 1 API use nbVideoPerPage = 10
+
+•	Sucees: JSON { listChannel:[{_id : ObjectID, duration : String, title : String}], message : String}
+•	Failure : JSON {listChannel : false, message : String}
+
+````
+
 
 Usage
 -----
